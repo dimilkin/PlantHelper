@@ -1,0 +1,20 @@
+# Colors : 
+
+colorPrimary > #008400
+colorPrimaryDark > #005600
+colorAccent > #80e86a
+
+# Gif Links :
+
+Swinging plant : https://assets6.lottiefiles.com/private_files/lf30_ridpj5cs.json
+
+Small Images : 
+
+https://assets1.lottiefiles.com/packages/lf20_wkvirknu.json
+https://assets6.lottiefiles.com/packages/lf20_valvvrfy.json
+https://assets1.lottiefiles.com/private_files/lf30_xsg73jmq.json
+https://assets4.lottiefiles.com/packages/lf20_ho3vw7rh.json
+https://assets3.lottiefiles.com/packages/lf20_hrff4es5.json
+
+Loading suggestions: 
+https://assets8.lottiefiles.com/packages/lf20_pcap7iz2.json
