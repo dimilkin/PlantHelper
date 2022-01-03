@@ -28,9 +28,9 @@ public class MainPlantsListViewModel extends AndroidViewModel {
         Plant plant2 = new Plant();
         Plant plant3 = new Plant();
 
-        plant1.setCommonName("Orchidea");
+        plant1.setCommonName("Orchid");
         plant1.setWatering("every two weeks");
-        plant2.setCommonName("Kokiche");
+        plant2.setCommonName("Snowdrop");
         plant2.setWatering("every week");
         plant3.setCommonName("Cactus");
         plant3.setWatering("every two months");
