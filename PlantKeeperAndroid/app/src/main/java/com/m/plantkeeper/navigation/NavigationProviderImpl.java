@@ -35,12 +35,4 @@ public class NavigationProviderImpl implements Navigation {
         fragment.setArguments(bundle);
         navigateToFragment(fragment, activity, containerId);
     }
-
-    private void navigateToChildFragment(FragmentActivity activity){
-//        FragmentManager cfManager = activity.getChildFragmentManager();
-//        FragmentTransaction fragmentTransaction = cfManager.beginTransaction();
-//        fragmentTransaction.replace(R.id.nestedFrameLayout, addEditTransactionFragment);
-//        fragmentTransaction.addToBackStack(null).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-//        fragmentTransaction.commit();
-    }
 }

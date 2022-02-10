@@ -1,117 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:id="@+id/relativeLayout"
+<layout>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:layout_gravity="center"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/addEditAnimationView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
         android:layout_centerInParent="true"
-        app:lottie_url="https://assets2.lottiefiles.com/private_files/lf30_ridpj5cs.json"
+        android:scaleType="centerCrop"
         app:lottie_autoPlay="true"
-        app:lottie_loop="true" />
+        app:lottie_loop="true"
+        app:lottie_url="https://assets2.lottiefiles.com/private_files/lf30_ridpj5cs.json"
+        tools:layout_editor_absoluteX="-34dp"
+        tools:layout_editor_absoluteY="-67dp" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/textView"
+        style="@style/TextStyleDArkGreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:text="Give Your Plant a Name :"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextTextPersonName"
+        style="@style/Widget.AppCompat.EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerInParent="true"
-        android:scaleType="centerCrop"
-        android:alpha=".85"
-        android:paddingStart="6dp"
-        android:paddingEnd="6dp"
-        android:paddingTop="3dp"
-        android:paddingBottom="3dp"
-        android:orientation="vertical">
+        android:layout_margin="10dp"
+        android:drawableTint="@color/colorAccent"
+        android:ems="10"
+        android:hint="Name"
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        android:textColor="@android:color/holo_green_dark"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:layout_editor_absoluteX="44dp" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/choosePlantTypeButton"
+        style="@style/styled_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_marginStart="8dp"
+        android:text="Choose Plant Type"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/chodenPlantTypeText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+
+    <TextView
+        android:id="@+id/chodenPlantTypeText"
+        style="@style/TextStyleDArkGreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Firelia Aquatica"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/timePickerBlock"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+
+    <TextView
+        android:id="@+id/setWateringIntervalTextView"
+        style="@style/TextStyleDArkGreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_marginStart="16dp"
+        android:text="Set Watering Intervals :"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/timePickerBlock"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/timePickerBlock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/addEditAnimationView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName">
+
+        <NumberPicker
+            android:id="@+id/periodNumbersPicker"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="30"
+            android:background="#00DCFFC9"
+            android:backgroundTint="#00E9FFCA"
+            android:backgroundTintMode="screen"
+            android:baselineAligned="false" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/styled_button"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/TextStyleDArkGreen"
-            android:backgroundTint="@color/colorPrimaryDark"
-            android:text="Give Your Plant a Name :"
-            android:textSize="24sp"
-            android:layout_margin="10dp"/>
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="35"
+            android:text="Days"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="266dp" />
 
-        <EditText
-            android:id="@+id/editTextTextPersonName"
-            style="@style/Widget.AppCompat.EditText"
-            android:layout_width="match_parent"
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/styled_button"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:ems="10"
-            android:drawableTint="@color/colorAccent"
-            android:hint="Name"
-            android:inputType="textPersonName"
-            android:textAlignment="center"
-            android:textColor="@android:color/holo_green_dark"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/TextStyleDArkGreen"
-            android:text="Choose Plant Type:"
-            android:textSize="18sp"
-            android:layout_margin="10dp"/>
-
-        <androidx.appcompat.widget.AppCompatSpinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"/>
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/TextStyleDArkGreen"
-            android:text="Set Watering Intervals :"
-            android:textSize="18sp"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <NumberPicker
-                android:id="@+id/periodNumbersPicker"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="1"
-                android:background="#00DCFFC9"
-                android:backgroundTint="#00E9FFCA"
-                android:backgroundTintMode="screen"
-                android:baselineAligned="false" />
-
-            <NumberPicker
-                android:id="@+id/periodValuesPicker"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="1"/>
-
-        </LinearLayout>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_margin="10dp"
-            android:text="Save"/>
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="35"
+            android:text="Weeks"
+            tools:layout_editor_absoluteX="17dp"
+            tools:layout_editor_absoluteY="184dp" />
 
     </LinearLayout>
 
-</RelativeLayout>
+    <Button
+        style="@style/styled_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="20dp"
+        android:paddingStart="50dp"
+        android:paddingEnd="50dp"
+        android:text="Save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timePickerBlock"
+        app:layout_constraintVertical_bias="0.871" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

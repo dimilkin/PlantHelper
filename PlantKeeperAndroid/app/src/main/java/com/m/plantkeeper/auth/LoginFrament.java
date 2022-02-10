@@ -10,21 +10,24 @@ import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.m.plantkeeper.R;
 import com.m.plantkeeper.databinding.FragmentLoginFramentBinding;
+import com.m.plantkeeper.navigation.Navigation;
+import com.m.plantkeeper.navigation.NavigationProviderImpl;
 
 public class LoginFrament extends Fragment {
 
     TextInputLayout passwordTextInput, emailTextImput;
     TextInputEditText passwordTextEdit, emailTextEdit;
-    MaterialButton logInButton, registerButton;
+    Button logInButton, registerButton;
+    Navigation navigation;
 
     public LoginFrament() {
-        // Required empty public constructor
+        navigation = new NavigationProviderImpl();
     }
 
     @Override
@@ -38,9 +41,7 @@ public class LoginFrament extends Fragment {
         logInButton = dataBinding.logInButton;
         registerButton = dataBinding.registerButton;
 
-//        registerButton.setOnClickListener(view -> {
-//            ((FragmentNavigation) getActivity()).navigateToFragment(new RegisterFragment(), false);
-//        });
+        registerButton.setOnClickListener(view -> navigation.navigateToFragment(new RegisterFragment(), getActivity(), R.id.authContainer));
 
         logInButton.setOnClickListener(view -> {
             if (showError(passwordTextEdit.getText())) {

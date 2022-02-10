@@ -22,6 +22,7 @@ public class RegisterFragment extends Fragment {
     Button registrationButton;
     TextView iHaveAnAccountText;
 
+
     public RegisterFragment() {
         // Required empty public constructor
     }
@@ -39,30 +40,25 @@ public class RegisterFragment extends Fragment {
         iHaveAnAccountText = dataBinding.haveAnAccountField;
 
 
-        registrationButton.setOnClickListener( b-> {
+        registrationButton.setOnClickListener(b -> {
             String email = emailEditText.getText().toString();
             String password = passwordEditText.getText().toString();
             String repeatedPassword = repeatPasswordEditText.getText().toString();
-            if (email.trim().length() == 0 ){
+            if (email.trim().length() == 0) {
                 Toast.makeText(getContext(), "Incorrect mail", Toast.LENGTH_SHORT).show();
-            }else if (!repeatedPassword.equals(password)) {
+            } else if (!repeatedPassword.equals(password)) {
                 Toast.makeText(getContext(), "Passwords don't match", Toast.LENGTH_SHORT).show();
-            }else {
+            } else {
 //                ((AuthActivity) getActivity()).registerNewUser(email, password);
                 Toast.makeText(getContext(), "Registration successful! Please confirm email", Toast.LENGTH_LONG).show();
-                navigateToLoginFragment();
+                getActivity().getSupportFragmentManager().popBackStack();
             }
         });
 
-        iHaveAnAccountText.setOnClickListener( v-> {
-            navigateToLoginFragment();
+        iHaveAnAccountText.setOnClickListener(v -> {
+            getActivity().getSupportFragmentManager().popBackStack();
         });
 
-
         return dataBinding.getRoot();
-    }
-
-    private void navigateToLoginFragment(){
-//        ((FragmentNavigation) getActivity()).navigateToFragment(new LoginFrament(), false);
     }
 }

@@ -19,8 +19,8 @@ public class Plant {
     private String airHumidity;
     private String propagation;
     private String whereItGrowsBest;
-    private List<String> potentialProblems = new ArrayList<>();
-    private List<String> additionalInformation = new ArrayList<>();
+    private List<PotentialPlantProblems> potentialProblems = new ArrayList<>();
+    private List<AdditionalPlantInfo> additionalInformation = new ArrayList<>();
 
     public Plant() {
     }
@@ -137,19 +137,19 @@ public class Plant {
         this.whereItGrowsBest = whereItGrowsBest;
     }
 
-    public List<String> getPotentialProblems() {
+    public List<PotentialPlantProblems> getPotentialProblems() {
         return potentialProblems;
     }
 
-    public void setPotentialProblems(List<String> potentialProblems) {
+    public void setPotentialProblems(List<PotentialPlantProblems> potentialProblems) {
         this.potentialProblems = potentialProblems;
     }
 
-    public List<String> getAdditionalInformation() {
+    public List<AdditionalPlantInfo> getAdditionalInformation() {
         return additionalInformation;
     }
 
-    public void setAdditionalInformation(List<String> additionalInformation) {
+    public void setAdditionalInformation(List<AdditionalPlantInfo> additionalInformation) {
         this.additionalInformation = additionalInformation;
     }
 }
