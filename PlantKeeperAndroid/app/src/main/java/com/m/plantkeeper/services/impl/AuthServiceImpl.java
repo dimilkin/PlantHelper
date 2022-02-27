@@ -6,6 +6,7 @@ import com.m.plantkeeper.network.NetworkProvider;
 import com.m.plantkeeper.services.AuthService;
 
 import io.reactivex.Single;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 public class AuthServiceImpl implements AuthService {
@@ -26,12 +27,12 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    public Call<AuthResponse> authenticate(String email, String password) {
+    public Call<Integer> authenticate(String email, String password) {
         return networkProvider.getConnection().authenticate(email, password);
     }
 
     @Override
-    public Single<String> registerNewUser(RegistrationInfo registrationInfo) {
+    public Single<ResponseBody> registerNewUser(RegistrationInfo registrationInfo) {
         return networkProvider.getConnection().registerNewUser(registrationInfo);
     }
 }

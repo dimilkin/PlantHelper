@@ -1,10 +1,13 @@
 package com.m.plantkeeper.viewmodels;
 
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.m.plantkeeper.auth.LoginActivity;
 import com.m.plantkeeper.models.AuthCredentials;
 import com.m.plantkeeper.models.AuthResponse;
 import com.m.plantkeeper.models.RegistrationInfo;
@@ -16,17 +19,16 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AuthActivityViewModel extends ViewModel {
 
-    public MutableLiveData<Boolean> isUserAuthenticated = new MutableLiveData<Boolean>();
-    public MutableLiveData<Boolean> isUserRegistered = new MutableLiveData<Boolean>();
-    public MutableLiveData<Boolean> isLoading = new MutableLiveData<Boolean>();
-    public MutableLiveData<Boolean> loadingError = new MutableLiveData<Boolean>();
-    public MutableLiveData<AuthCredentials> credentials = new MutableLiveData<AuthCredentials>();
+    private MutableLiveData<Boolean> userAuthenticated = new MutableLiveData<Boolean>();
+    private MutableLiveData<Boolean> userRegistered = new MutableLiveData<Boolean>();
+    private MutableLiveData<AuthCredentials> credentials = new MutableLiveData<AuthCredentials>();
 
     private AuthService authService;
     private CompositeDisposable disposable = new CompositeDisposable();
@@ -37,50 +39,42 @@ public class AuthActivityViewModel extends ViewModel {
     }
 
     public void authenticate(String email, String password) {
-        isLoading.setValue(true);
-        authService
-                .authenticate(email, password)
-                .enqueue(new Callback<AuthResponse>() {
-                    @Override
-                    public void onResponse(Call<AuthResponse> call, @NonNull Response<AuthResponse> response) {
-                        isLoading.setValue(false);
-                        isUserAuthenticated.setValue(true);
-                        loadingError.setValue(false);
-                        String token = response.headers().get("authToken");
-                        int userId = response.body().getUserId();
-                        AuthCredentials authCredentials = new AuthCredentials();
-                        authCredentials.setUserToken(token);
-                        authCredentials.setUserId(userId);
-                        credentials.setValue(authCredentials);
-                    }
+        Call<Integer> authCall = authService.authenticate(email, password);
+        authCall.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
+                if (response.headers().get("authToken") != null) {
+                    userAuthenticated.setValue(true);
+                    String token = response.headers().get("authToken");
+                    int userId = response.body() == null ? -1 : response.body();
+                    AuthCredentials authCredentials = new AuthCredentials();
+                    authCredentials.setUserToken(token);
+                    authCredentials.setUserId(userId);
+                    credentials.setValue(authCredentials);
+                }
+            }
 
-                    @Override
-                    public void onFailure(Call<AuthResponse> call, Throwable t) {
-                        isLoading.setValue(false);
-                        isUserAuthenticated.setValue(false);
-                        loadingError.setValue(true);
-                    }
-                });
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+                t.printStackTrace();
+                userAuthenticated.setValue(false);
+            }
+        });
     }
 
-    public void registerNewUser (RegistrationInfo registrationInfo){
-        isLoading.setValue(true);
+    public void registerNewUser(RegistrationInfo registrationInfo) {
         disposable.add(authService.registerNewUser(registrationInfo)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableSingleObserver<String>() {
+                .subscribeWith(new DisposableSingleObserver<ResponseBody>() {
                     @Override
-                    public void onSuccess(@NonNull String s) {
-                        isLoading.setValue(false);
-                        isUserRegistered.setValue(true);
-                        loadingError.setValue(false);
+                    public void onSuccess(@NonNull ResponseBody body) {
+                        userRegistered.setValue(true);
                     }
-
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        isLoading.setValue(false);
-                        isUserRegistered.setValue(false);
-                        loadingError.setValue(true);
+                        e.printStackTrace();
+                        userRegistered.setValue(false);
                     }
                 }));
     }
@@ -89,5 +83,17 @@ public class AuthActivityViewModel extends ViewModel {
     protected void onCleared() {
         super.onCleared();
         disposable.clear();
+    }
+
+    public MutableLiveData<Boolean> isUserAuthenticated() {
+        return userAuthenticated;
+    }
+
+    public MutableLiveData<Boolean> isUserRegistered() {
+        return userRegistered;
+    }
+
+    public MutableLiveData<AuthCredentials> getCredentials() {
+        return credentials;
     }
 }

@@ -9,6 +9,7 @@ import com.m.plantkeeper.models.dtos.UserPlantDto;
 import java.util.List;
 
 import io.reactivex.Single;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -21,13 +22,13 @@ import retrofit2.http.Path;
 public interface NetworkApi {
 
     @GET("user/authentication")
-    Call<AuthResponse> authenticate(
+    Call<Integer> authenticate(
             @Header("userMail") String userEmail,
             @Header("userPass") String userPassword
     );
 
     @POST("user/registration")
-    Single<String> registerNewUser(
+    Single<ResponseBody> registerNewUser(
             @Body RegistrationInfo registrationInfo
     );
 
