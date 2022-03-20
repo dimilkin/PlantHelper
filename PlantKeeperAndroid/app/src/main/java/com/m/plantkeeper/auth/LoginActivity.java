@@ -1,10 +1,5 @@
 package com.m.plantkeeper.auth;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,20 +8,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.m.plantkeeper.MainActivity;
 import com.m.plantkeeper.R;
-import com.m.plantkeeper.models.AuthCredentials;
-import com.m.plantkeeper.models.AuthResponse;
 import com.m.plantkeeper.navigation.Navigation;
 import com.m.plantkeeper.navigation.NavigationProviderImpl;
-import com.m.plantkeeper.services.AuthService;
-import com.m.plantkeeper.services.impl.AuthServiceImpl;
-import com.m.plantkeeper.ui.PlantsListFragment;
 import com.m.plantkeeper.viewmodels.AuthActivityViewModel;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -70,8 +59,11 @@ public class LoginActivity extends AppCompatActivity {
     private void getCredentials(boolean isAuthenticated) {
         if (isAuthenticated) {
             authViewModel.getCredentials().observe(this, credentials -> {
-                SharedPreferences preferences = getSharedPreferences("CarSafe", Context.MODE_PRIVATE);
-                preferences.edit().putString("AUTHTOKEN", credentials.getUserToken()).putInt("USERID", credentials.getUserId()).apply();
+                SharedPreferences preferences = getSharedPreferences("UserAuthInfo", Context.MODE_PRIVATE);
+                preferences.edit()
+                        .putString("AUTHTOKEN", credentials.getUserToken())
+                        .putInt("USERID", credentials.getUserId())
+                        .apply();
             });
             navigation.navigateToActivity(this, MainActivity.class);
         } else {

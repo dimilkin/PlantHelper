@@ -1,5 +1,7 @@
 package com.m.plantkeeper.ui;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -44,6 +46,10 @@ public class PlantsListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_plants_list, container, false);
 
+        Bundle bundle = this.getArguments();
+        String token = bundle.getString("AUTHTOKEN");
+        int userId = bundle.getInt("USERID");
+        viewModel.initializePlants(token, userId);
 
         recyclerView = view.findViewById(R.id.plantsRecyclerView);
         adapter = new MainPlantsListAdapter();
@@ -55,16 +61,27 @@ public class PlantsListFragment extends Fragment {
         observePlants();
 
         adapter.setAdapterClickListener(plantItem -> {
-            navigateToPlantInfoFragment();
+            navigateToPlantInfoFragment(plantItem.getId());
         });
-
-
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        observePlants();
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.app_bar_menu, menu);
+    }
+
+    private void observePlants() {
+        viewModel.getPlantsList().observe(getViewLifecycleOwner(), plants -> {
+            adapter.submitList(plants);
+            adapter.notifyDataSetChanged();
+        });
     }
 
     @Override
@@ -77,14 +94,6 @@ public class PlantsListFragment extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
-
-    }
-
-    private void observePlants() {
-        viewModel.plantsList.observe(getViewLifecycleOwner(), plants -> {
-            adapter.submitList(plants);
-            adapter.notifyDataSetChanged();
-        });
     }
 
     private void navigateToAddNewPlant() {
@@ -93,9 +102,11 @@ public class PlantsListFragment extends Fragment {
         navigation.navigateToFragment(addEditPlantFragment, getActivity(), R.id.mainFragmentContainer);
     }
 
-    private void navigateToPlantInfoFragment() {
+    private void navigateToPlantInfoFragment(int plantId) {
         Navigation navigation = new NavigationProviderImpl();
         PlantInfoFragment plantInfoFragment = new PlantInfoFragment();
-        navigation.navigateToFragment(plantInfoFragment, getActivity(), 1, "plantInfo", R.id.mainFragmentContainer);
+        Bundle bundle = new Bundle();
+        bundle.putInt("PLANT_ID", plantId);
+        navigation.navigateToFragment(plantInfoFragment, getActivity(), R.id.mainFragmentContainer, bundle, "plantInfo");
     }
 }

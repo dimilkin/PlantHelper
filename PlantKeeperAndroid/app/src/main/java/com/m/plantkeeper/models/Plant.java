@@ -1,8 +1,8 @@
 package com.m.plantkeeper.models;
 
-import java.util.ArrayList;
-import java.util.List;
+import androidx.room.Entity;
 
+@Entity(tableName = "plants_info")
 public class Plant {
 
     private int id;
@@ -19,8 +19,6 @@ public class Plant {
     private String airHumidity;
     private String propagation;
     private String whereItGrowsBest;
-    private List<PotentialPlantProblems> potentialProblems = new ArrayList<>();
-    private List<AdditionalPlantInfo> additionalInformation = new ArrayList<>();
 
     public Plant() {
     }
@@ -137,19 +135,4 @@ public class Plant {
         this.whereItGrowsBest = whereItGrowsBest;
     }
 
-    public List<PotentialPlantProblems> getPotentialProblems() {
-        return potentialProblems;
-    }
-
-    public void setPotentialProblems(List<PotentialPlantProblems> potentialProblems) {
-        this.potentialProblems = potentialProblems;
-    }
-
-    public List<AdditionalPlantInfo> getAdditionalInformation() {
-        return additionalInformation;
-    }
-
-    public void setAdditionalInformation(List<AdditionalPlantInfo> additionalInformation) {
-        this.additionalInformation = additionalInformation;
-    }
 }

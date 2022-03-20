@@ -13,12 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.m.plantkeeper.R;
 import com.m.plantkeeper.models.Plant;
+import com.m.plantkeeper.models.UserPlant;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MainPlantsListAdapter extends ListAdapter<Plant, MainPlantsListAdapter.PlantsHolder> {
+public class MainPlantsListAdapter extends ListAdapter<UserPlant, MainPlantsListAdapter.PlantsHolder> {
 
     private AdapterClickListener adapterClickListener;
 
@@ -26,15 +27,15 @@ public class MainPlantsListAdapter extends ListAdapter<Plant, MainPlantsListAdap
         super(DIFF_CALLBACK);
     }
 
-    private static final DiffUtil.ItemCallback<Plant> DIFF_CALLBACK = new DiffUtil.ItemCallback<Plant>() {
+    private static final DiffUtil.ItemCallback<UserPlant> DIFF_CALLBACK = new DiffUtil.ItemCallback<UserPlant>() {
         @Override
-        public boolean areItemsTheSame(@NonNull Plant oldItem, @NonNull Plant newItem) {
+        public boolean areItemsTheSame(@NonNull UserPlant oldItem, @NonNull UserPlant newItem) {
             return oldItem.getId() == newItem.getId();
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull Plant oldItem, @NonNull Plant newItem) {
-            return oldItem.getCommonName().equals(newItem.getCommonName());
+        public boolean areContentsTheSame(@NonNull UserPlant oldItem, @NonNull UserPlant newItem) {
+            return oldItem.getProvidedName().equals(newItem.getProvidedName());
         }
     };
 
@@ -47,7 +48,7 @@ public class MainPlantsListAdapter extends ListAdapter<Plant, MainPlantsListAdap
 
     @Override
     public void onBindViewHolder(@NonNull PlantsHolder holder, int position) {
-        Plant plant = getItem(position);
+        UserPlant plant = getItem(position);
 
         List<String> urls = new ArrayList<>();
         urls.add("https://assets7.lottiefiles.com/packages/lf20_hocmonst.json");
@@ -61,8 +62,8 @@ public class MainPlantsListAdapter extends ListAdapter<Plant, MainPlantsListAdap
         Random random= new Random();
         int index = random.nextInt(urls.size());
         holder.animationView.setAnimationFromUrl(urls.get(index));
-        holder.plantName.setText(plant.getCommonName());
-        holder.plantWaterTime.setText(plant.getWatering());
+        holder.plantName.setText(plant.getProvidedName());
+        holder.plantWaterTime.setText(String.valueOf(plant.getWaterPeriod()));
     }
 
     class PlantsHolder extends RecyclerView.ViewHolder {
@@ -88,7 +89,7 @@ public class MainPlantsListAdapter extends ListAdapter<Plant, MainPlantsListAdap
     }
 
     public interface AdapterClickListener {
-        void onAdapterClick(Plant plantItem);
+        void onAdapterClick(UserPlant plantItem);
     }
 
     public void setAdapterClickListener(AdapterClickListener adapterClickListener){

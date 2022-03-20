@@ -35,7 +35,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/plantNameEditText"
         style="@style/Widget.AppCompat.EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -59,22 +59,22 @@
         android:layout_marginStart="8dp"
         android:text="Choose Plant Type"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/chodenPlantTypeText"
+        app:layout_constraintBottom_toTopOf="@+id/chosenPlantTypeText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+        app:layout_constraintTop_toBottomOf="@+id/plantNameEditText" />
 
     <TextView
-        android:id="@+id/chodenPlantTypeText"
+        android:id="@+id/chosenPlantTypeText"
         style="@style/TextStyleDArkGreen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:text="Firelia Aquatica"
+        android:text="Test Test"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/timePickerBlock"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+        app:layout_constraintTop_toBottomOf="@+id/plantNameEditText" />
 
     <TextView
         android:id="@+id/setWateringIntervalTextView"
@@ -96,7 +96,7 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="@+id/addEditAnimationView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName">
+        app:layout_constraintTop_toBottomOf="@+id/plantNameEditText">
 
         <NumberPicker
             android:id="@+id/periodNumbersPicker"
@@ -111,6 +111,7 @@
             android:baselineAligned="false" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/setDaysButton"
             style="@style/styled_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -122,6 +123,7 @@
             tools:layout_editor_absoluteY="266dp" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/setWeeksButton"
             style="@style/styled_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -135,6 +137,7 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/savePlantButton"
         style="@style/styled_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

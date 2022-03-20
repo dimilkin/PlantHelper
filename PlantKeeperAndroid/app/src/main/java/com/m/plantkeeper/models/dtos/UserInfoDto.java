@@ -11,4 +11,38 @@ public class UserInfoDto {
     private List<UserPlant> ownPlants;
     private List<UserPlant> assignedPlants;
 
+    public UserInfoDto() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public List<UserPlant> getOwnPlants() {
+        return ownPlants;
+    }
+
+    public void setOwnPlants(List<UserPlant> ownPlants) {
+        this.ownPlants = ownPlants;
+    }
+
+    public List<UserPlant> getAssignedPlants() {
+        return assignedPlants;
+    }
+
+    public void setAssignedPlants(List<UserPlant> assignedPlants) {
+        this.assignedPlants = assignedPlants;
+    }
 }

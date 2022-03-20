@@ -7,44 +7,57 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.m.plantkeeper.models.Plant;
+import com.m.plantkeeper.models.UserPlant;
+import com.m.plantkeeper.models.dtos.UserInfoDto;
+import com.m.plantkeeper.services.UserPlantsService;
+import com.m.plantkeeper.services.impl.UserPlantsServiceImpl;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Single;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 
 public class MainPlantsListViewModel extends AndroidViewModel {
 
-    public MutableLiveData<List<Plant>> plantsList = new MutableLiveData<>();
+    private MutableLiveData<List<UserPlant>> plantsList = new MutableLiveData<>();
+    private UserPlantsService userPlantsService;
 
-
+    private CompositeDisposable disposable = new CompositeDisposable();
 
     public MainPlantsListViewModel(@NonNull Application application) {
         super(application);
-        initializePlants();
+        userPlantsService = UserPlantsServiceImpl.getInstance();
     }
 
-    private void initializePlants(){
+    public void initializePlants(String token, int userId) {
+        disposable.add(userPlantsService.getUserPlants(token, userId)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<UserInfoDto>() {
+                    @Override
+                    public void onSuccess(UserInfoDto userInfoDto) {
+                        List<UserPlant> userPlants = userInfoDto.getOwnPlants();
+                        plantsList.setValue(userPlants);
+                    }
 
-        Plant plant1 = new Plant();
-        Plant plant2 = new Plant();
-        Plant plant3 = new Plant();
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+                }));
+    }
 
-        plant1.setCommonName("Orchid");
-        plant1.setWatering("every two weeks");
-        plant2.setCommonName("Snowdrop");
-        plant2.setWatering("every week");
-        plant3.setCommonName("Cactus");
-        plant3.setWatering("every two months");
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        disposable.clear();
+    }
 
-        List<Plant> plants = new ArrayList<>();
-        plants.add(plant1);
-        plants.add(plant2);
-        plants.add(plant3);
-        plants.add(plant1);
-        plants.add(plant2);
-        plants.add(plant3);
-        plants.add(plant1);
-
-        plantsList.setValue(plants);
-
+    public MutableLiveData<List<UserPlant>> getPlantsList() {
+        return plantsList;
     }
 }

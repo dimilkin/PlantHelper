@@ -2,8 +2,10 @@ package com.m.plantkeeper.network;
 
 import com.m.plantkeeper.models.AuthResponse;
 import com.m.plantkeeper.models.Plant;
+import com.m.plantkeeper.models.PlantShortInfo;
 import com.m.plantkeeper.models.RegistrationInfo;
 import com.m.plantkeeper.models.dtos.PlantsInfoDto;
+import com.m.plantkeeper.models.dtos.UserInfoDto;
 import com.m.plantkeeper.models.dtos.UserPlantDto;
 
 import java.util.List;
@@ -33,7 +35,7 @@ public interface NetworkApi {
     );
 
     @GET("user/profile/{userId}")
-    Single<AuthResponse> getInfoForUser(
+    Single<UserInfoDto> getInfoForUser(
             @Header("Authorization") String token,
             @Path("userId") int userId
     );
@@ -47,14 +49,14 @@ public interface NetworkApi {
     );
 
     @GET("plants/allPlants")
-    Single<List<PlantsInfoDto>> getPlantsNamesAndIds(
+    Single<List<PlantShortInfo>> getPlantsNamesAndIds(
             @Header("Authorization") String token
     );
 
     // -------------------------------------------------
 
     @POST("userplants/{hostUserId}/{plantId}")
-    Single<AuthResponse> addPlantToUserProfile(
+    Call<ResponseBody> addPlantToUserProfile(
             @Header("Authorization") String token,
             @Path("hostUserId") int hostUserId,
             @Path("plantId") int plantId,

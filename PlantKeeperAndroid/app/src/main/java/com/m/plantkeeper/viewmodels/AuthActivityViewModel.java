@@ -1,5 +1,6 @@
 package com.m.plantkeeper.viewmodels;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -43,6 +44,10 @@ public class AuthActivityViewModel extends ViewModel {
         authCall.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
+                if (response.raw().code() == 401){
+                    Log.i("Auth:", "Unauthorized");
+                    userAuthenticated.setValue(false);
+                }
                 if (response.headers().get("authToken") != null) {
                     userAuthenticated.setValue(true);
                     String token = response.headers().get("authToken");
