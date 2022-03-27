@@ -61,7 +61,7 @@ public class PlantsListFragment extends Fragment {
         observePlants();
 
         adapter.setAdapterClickListener(plantItem -> {
-            navigateToPlantInfoFragment(plantItem.getId());
+            navigateToPlantInfoFragment(plantItem.getPlant().getId());
         });
         return view;
     }
@@ -107,6 +107,6 @@ public class PlantsListFragment extends Fragment {
         PlantInfoFragment plantInfoFragment = new PlantInfoFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("PLANT_ID", plantId);
-        navigation.navigateToFragment(plantInfoFragment, getActivity(), R.id.mainFragmentContainer, bundle, "plantInfo");
+        navigation.navigateToFragment(plantInfoFragment, getActivity(), R.id.mainFragmentContainer, bundle);
     }
 }

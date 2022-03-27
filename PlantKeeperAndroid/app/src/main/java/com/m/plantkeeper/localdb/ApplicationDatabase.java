@@ -1,4 +1,4 @@
-package localdb;
+package com.m.plantkeeper.localdb;
 
 import android.content.Context;
 
@@ -6,9 +6,8 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import com.m.plantkeeper.localdb.dao.PlantDao;
 import com.m.plantkeeper.models.Plant;
-
-import localdb.dao.PlantDao;
 
 @Database(entities = {Plant.class}, version = 1)
 public abstract class ApplicationDatabase extends RoomDatabase {
@@ -20,7 +19,8 @@ public abstract class ApplicationDatabase extends RoomDatabase {
 
     public static synchronized ApplicationDatabase getInstance(Context cotext) {
         if (instance == null) {
-            instance = Room.databaseBuilder(cotext.getApplicationContext(), ApplicationDatabase.class, "plants_database")
+            instance = Room
+                    .databaseBuilder(cotext.getApplicationContext(), ApplicationDatabase.class, "plants_database")
                     .build();
         }
         return instance;

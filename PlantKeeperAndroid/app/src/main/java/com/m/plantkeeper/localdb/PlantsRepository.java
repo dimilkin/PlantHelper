@@ -1,19 +1,16 @@
-package localdb;
+package com.m.plantkeeper.localdb;
 
 import android.app.Application;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
-import androidx.room.Room;
 
+import com.m.plantkeeper.localdb.dao.PlantDao;
 import com.m.plantkeeper.models.Plant;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-
-import localdb.dao.PlantDao;
 
 public class PlantsRepository {
 
@@ -57,8 +54,8 @@ public class PlantsRepository {
         }
 
         @Override
-        protected Void doInBackground(Plant... children) {
-            plantDao.update(children[0]);
+        protected Void doInBackground(Plant... plants) {
+            plantDao.update(plants[0]);
             return null;
         }
     }
@@ -71,36 +68,49 @@ public class PlantsRepository {
         }
 
         @Override
-        protected Void doInBackground(Plant... children) {
-            plantDao.delete(children[0]);
+        protected Void doInBackground(Plant... plants) {
+            plantDao.delete(plants[0]);
             return null;
         }
 
     }
 
-    private static class ReloadPlantsAlarmInfoAsyncTask extends AsyncTask<Plant, Void, List<Plant>> {
+    private static class ReloadPlantsAlarmInfoAsyncTask extends AsyncTask<Void, Void, List<Plant>> {
         private PlantDao plantDao;
 
-        private ReloadPlantsAlarmInfoAsyncTask(PlantDao plantDao){
+        private ReloadPlantsAlarmInfoAsyncTask(PlantDao plantDao) {
             this.plantDao = plantDao;
         }
 
         @Override
-        protected List<Plant> doInBackground(Plant... children) {
+        protected List<Plant> doInBackground(Void... voids) {
             return plantDao.reloadPlantsAlarmInfo();
         }
     }
 
-    public void insert(Plant child) {
-        new InsertPlantAsyncTask(plantsDao).execute(child);
+    private static class GetPlantFromDbById extends AsyncTask<Integer, Void, Plant> {
+        private PlantDao plantDao;
+
+        private GetPlantFromDbById(PlantDao plantDao) {
+            this.plantDao = plantDao;
+        }
+
+        @Override
+        protected Plant doInBackground(Integer... integers) {
+            return plantDao.getPlantById(integers[0]);
+        }
     }
 
-    public void update(Plant child) {
-        new UpdatePlantAsyncTask(plantsDao).execute(child);
+    public void insert(Plant plant) {
+        new InsertPlantAsyncTask(plantsDao).execute(plant);
     }
 
-    public void delete(Plant child) {
-        new DeletePlantAsyncTask(plantsDao).execute(child);
+    public void update(Plant plant) {
+        new UpdatePlantAsyncTask(plantsDao).execute(plant);
+    }
+
+    public void delete(Plant plant) {
+        new DeletePlantAsyncTask(plantsDao).execute(plant);
     }
 
     public LiveData<List<Plant>> getAllPlants() {
@@ -109,5 +119,18 @@ public class PlantsRepository {
 
     public List<Plant> reloadPlantAlarmInfo() throws ExecutionException, InterruptedException {
         return new ReloadPlantsAlarmInfoAsyncTask(plantsDao).execute().get();
+    }
+
+    public Plant getPlantFromDbById(int plantid) throws ExecutionException, InterruptedException {
+        return new GetPlantFromDbById(plantsDao).execute(plantid).get();
+    }
+
+    public boolean plantWithIdExists(int plantId) {
+        try {
+            return getPlantFromDbById(plantId) != null;
+        } catch (ExecutionException | InterruptedException e) {
+            Log.e("Failed To Get Plant From Db", "Failed To Get Plant From Db", e);
+            return false;
+        }
     }
 }

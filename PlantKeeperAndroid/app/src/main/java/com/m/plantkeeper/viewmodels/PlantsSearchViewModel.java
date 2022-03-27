@@ -24,14 +24,14 @@ public class PlantsSearchViewModel extends AndroidViewModel {
 
     public PlantsSearchViewModel(@NonNull Application application) {
         super(application);
-        plantsInfoService = PlantsInfoServiceImpl.getInstance();
+        plantsInfoService = PlantsInfoServiceImpl.getInstance(application);
     }
 
     public void getShortInfoForPlants(String token) {
         if (plantsInfoList.getValue() != null){
             return;
         }
-        disposable.add(plantsInfoService.getPlantsShortInfo(token)
+        disposable.add(plantsInfoService.getPlantsShortInfoFromServer(token)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSingleObserver<List<PlantShortInfo>>() {

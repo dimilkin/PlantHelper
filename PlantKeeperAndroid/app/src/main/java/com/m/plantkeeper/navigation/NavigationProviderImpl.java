@@ -40,7 +40,7 @@ public class NavigationProviderImpl implements Navigation {
     }
 
     @Override
-    public void navigateToFragment(Fragment fragment, FragmentActivity activity, int containerId, Bundle bundle, String key) {
+    public void navigateToFragment(Fragment fragment, FragmentActivity activity, int containerId, Bundle bundle) {
         fragment.setArguments(bundle);
         navigateToFragment(fragment, activity, containerId);
     }

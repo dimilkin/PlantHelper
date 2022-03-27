@@ -15,6 +15,6 @@ public interface Navigation {
     void navigateToPreviousFragment(FragmentActivity activity);
 
     void navigateToFragment(Fragment fragment, FragmentActivity activity, int containerId,
-                            Bundle bundle, String key);
+                            Bundle bundle);
 
 }

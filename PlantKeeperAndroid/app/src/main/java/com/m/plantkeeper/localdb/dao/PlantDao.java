@@ -1,4 +1,4 @@
-package localdb.dao;
+package com.m.plantkeeper.localdb.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -28,4 +28,7 @@ public interface PlantDao {
 
     @Query("SELECT * FROM plants_info ORDER BY id DESC")
     List<Plant> reloadPlantsAlarmInfo();
+
+    @Query("SELECT * FROM plants_info WHERE id = :plantId")
+    Plant getPlantById(int plantId);
 }

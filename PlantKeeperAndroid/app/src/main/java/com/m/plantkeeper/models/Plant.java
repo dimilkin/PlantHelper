@@ -1,10 +1,12 @@
 package com.m.plantkeeper.models;
 
 import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 @Entity(tableName = "plants_info")
 public class Plant {
 
+    @PrimaryKey
     private int id;
     private String origin;
     private String commonName;

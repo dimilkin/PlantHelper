@@ -3,7 +3,6 @@ package com.m.plantkeeper.ui;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +12,19 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentResultListener;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.m.plantkeeper.R;
 import com.m.plantkeeper.models.dtos.UserPlantDto;
 import com.m.plantkeeper.navigation.Navigation;
 import com.m.plantkeeper.navigation.NavigationProviderImpl;
+import com.m.plantkeeper.services.PlantsInfoService;
 import com.m.plantkeeper.services.UserPlantsService;
+import com.m.plantkeeper.services.impl.PlantsInfoServiceImpl;
 import com.m.plantkeeper.services.impl.UserPlantsServiceImpl;
-
-import java.security.spec.ECField;
+import com.m.plantkeeper.viewmodels.AddEditPlantViewModel;
+import com.m.plantkeeper.viewmodels.MainPlantsListViewModel;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -38,7 +38,8 @@ public class AddEditPlantFragment extends Fragment {
     private TextView plantTypeTextView;
     private NumberPicker intervalNumberPicker;
     private Navigation navigation;
-    private UserPlantsService userPlantsService;
+    private AddEditPlantViewModel viewModel;
+
     private boolean weeksChosen = false;
     private String providedName;
     private String plantName;
@@ -53,7 +54,7 @@ public class AddEditPlantFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         navigation = new NavigationProviderImpl();
-        userPlantsService = UserPlantsServiceImpl.getInstance();
+        viewModel = new ViewModelProvider(requireActivity()).get(AddEditPlantViewModel.class);
     }
 
     @Override
@@ -152,22 +153,19 @@ public class AddEditPlantFragment extends Fragment {
         }
         userPlantDto.setWaterPeriod(waterInterval);
         userPlantDto.setProvidedName(providedName);
-        try {
-            userPlantsService.createNewUserPlant(authToken, userid, plantId, userPlantDto).enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    navigation.navigateToPreviousFragment(getActivity());
-                }
 
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Toast.makeText(getActivity(), "Failed to save plant", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }catch (Exception e){
-            Log.e("Error: ", e.getMessage(), e);
-        }
+        viewModel.createNewUserPlant(authToken, userid, plantId, userPlantDto).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                viewModel.savePlantDataFromServerToLocalStoarage(authToken, plantId);
+                navigation.navigateToPreviousFragment(getActivity());
+            }
 
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getActivity(), "Failed to save plant", Toast.LENGTH_SHORT).show();
+            }
+        });
         Toast.makeText(getActivity(), "Saved", Toast.LENGTH_SHORT).show();
     }
 }
