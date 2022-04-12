@@ -19,12 +19,7 @@ import com.m.plantkeeper.R;
 import com.m.plantkeeper.models.dtos.UserPlantDto;
 import com.m.plantkeeper.navigation.Navigation;
 import com.m.plantkeeper.navigation.NavigationProviderImpl;
-import com.m.plantkeeper.services.PlantsInfoService;
-import com.m.plantkeeper.services.UserPlantsService;
-import com.m.plantkeeper.services.impl.PlantsInfoServiceImpl;
-import com.m.plantkeeper.services.impl.UserPlantsServiceImpl;
 import com.m.plantkeeper.viewmodels.AddEditPlantViewModel;
-import com.m.plantkeeper.viewmodels.MainPlantsListViewModel;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -106,7 +101,7 @@ public class AddEditPlantFragment extends Fragment {
         providedName = setPlantNameTextField.getText().toString();
     }
 
-    private void initialiseView(View view){
+    private void initialiseView(View view) {
         choosePlantTypeButton = view.findViewById(R.id.choosePlantTypeButton);
         plantTypeTextView = view.findViewById(R.id.chosenPlantTypeText);
         setPlantNameTextField = view.findViewById(R.id.plantNameEditText);
@@ -116,7 +111,7 @@ public class AddEditPlantFragment extends Fragment {
         intervalNumberPicker = view.findViewById(R.id.periodNumbersPicker);
     }
 
-    private void setUpNumberPicker(){
+    private void setUpNumberPicker() {
         intervalNumberPicker.setMinValue(1);
         intervalNumberPicker.setMaxValue(30);
         intervalNumberPicker.setWrapSelectorWheel(true);
@@ -158,6 +153,7 @@ public class AddEditPlantFragment extends Fragment {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 viewModel.savePlantDataFromServerToLocalStoarage(authToken, plantId);
+                viewModel.startNewAlarm(providedName, userPlantDto.getWaterPeriod(), plantId);
                 navigation.navigateToPreviousFragment(getActivity());
             }
 

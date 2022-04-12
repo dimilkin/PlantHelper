@@ -7,15 +7,12 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import com.m.plantkeeper.models.Plant;
-import com.m.plantkeeper.models.PlantShortInfo;
 import com.m.plantkeeper.models.dtos.UserPlantDto;
+import com.m.plantkeeper.notifications.local.AlarmProvider;
 import com.m.plantkeeper.services.PlantsInfoService;
 import com.m.plantkeeper.services.UserPlantsService;
 import com.m.plantkeeper.services.impl.PlantsInfoServiceImpl;
 import com.m.plantkeeper.services.impl.UserPlantsServiceImpl;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -29,16 +26,22 @@ public class AddEditPlantViewModel extends AndroidViewModel {
     private PlantsInfoService plantsInfoService;
     private UserPlantsService userPlantsService;
     private CompositeDisposable disposable = new CompositeDisposable();
+    private AlarmProvider alarmProvider;
 
 
     public AddEditPlantViewModel(@NonNull Application application) {
         super(application);
         plantsInfoService = PlantsInfoServiceImpl.getInstance(application);
         userPlantsService = UserPlantsServiceImpl.getInstance();
+        alarmProvider = new AlarmProvider(application.getApplicationContext());
     }
 
     public Call<ResponseBody> createNewUserPlant(String authToken, int userid, int plantId, UserPlantDto userPlantDto) {
         return userPlantsService.createNewUserPlant(authToken, userid, plantId, userPlantDto);
+    }
+
+    public void startNewAlarm(String name, int waterPeriodDays, int intentId){
+        alarmProvider.startAlarm(name, waterPeriodDays, intentId);
     }
 
     public void savePlantDataFromServerToLocalStoarage(String authToken, int plantId) {
