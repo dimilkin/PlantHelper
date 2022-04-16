@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../../../layout/custom_preview.xml" value="0.35" />
+        <entry key="app/src/main/res/drawable/background_plant.xml" value="0.156" />
         <entry key="app/src/main/res/drawable/button_enabled.xml" value="0.35846153846153844" />
         <entry key="app/src/main/res/drawable/button_focused.xml" value="0.35846153846153844" />
         <entry key="app/src/main/res/drawable/button_pressed.xml" value="0.35846153846153844" />
@@ -15,10 +16,11 @@
         <entry key="app/src/main/res/layout/activity_register.xml" value="0.37916666666666665" />
         <entry key="app/src/main/res/layout/fragment_add_edit_plant.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_login_frament.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_plant_info.xml" value="0.19322916666666667" />
-        <entry key="app/src/main/res/layout/fragment_plant_info2.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_plant_info.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/fragment_plant_info2.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_plant_name_search.xml" value="0.2234375" />
         <entry key="app/src/main/res/layout/fragment_register.xml" value="0.40851449275362317" />
+        <entry key="app/src/main/res/layout/fragment_short_info.xml" value="0.1" />
         <entry key="app/src/main/res/layout/icon_text_item.xml" value="0.3546875" />
         <entry key="app/src/main/res/layout/item_plant.xml" value="0.41041666666666665" />
         <entry key="app/src/main/res/layout/item_plant_search.xml" value="0.25" />
