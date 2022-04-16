@@ -1,5 +1,8 @@
 package com.m.plantkeeper.ui;
 
+import static com.m.plantkeeper.Constants.EXTRA_USER_PLANT_NAME;
+import static com.m.plantkeeper.Constants.PLANT_ID;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -19,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.m.plantkeeper.R;
+import com.m.plantkeeper.models.UserPlant;
 import com.m.plantkeeper.navigation.Navigation;
 import com.m.plantkeeper.navigation.NavigationProviderImpl;
 import com.m.plantkeeper.ui.adapters.MainPlantsListAdapter;
@@ -60,8 +64,8 @@ public class PlantsListFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         observePlants();
 
-        adapter.setAdapterClickListener(plantItem -> {
-            navigateToPlantInfoFragment(plantItem.getPlant().getId());
+        adapter.setAdapterClickListener(userPlant -> {
+            navigateToPlantInfoFragment(userPlant);
         });
         return view;
     }
@@ -102,11 +106,12 @@ public class PlantsListFragment extends Fragment {
         navigation.navigateToFragment(addEditPlantFragment, getActivity(), R.id.mainFragmentContainer);
     }
 
-    private void navigateToPlantInfoFragment(int plantId) {
+    private void navigateToPlantInfoFragment(UserPlant userPlant) {
         Navigation navigation = new NavigationProviderImpl();
         PlantInfoFragment plantInfoFragment = new PlantInfoFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt("PLANT_ID", plantId);
+        bundle.putInt(PLANT_ID, userPlant.getId());
+        bundle.putString(EXTRA_USER_PLANT_NAME, userPlant.getProvidedName());
         navigation.navigateToFragment(plantInfoFragment, getActivity(), R.id.mainFragmentContainer, bundle);
     }
 }
