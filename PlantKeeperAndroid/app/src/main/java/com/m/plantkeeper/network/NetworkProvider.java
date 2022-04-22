@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class NetworkProvider  {
 
 //    public static final String BASE_URL = "https://plant-app-spring-backend.herokuapp.com/";
-    public static final String BASE_URL = "https://1f4f-95-42-32-10.ngrok.io/";
+    public static final String BASE_URL = "https://be20-151-251-246-129.ngrok.io/";
 
     private String apiVersion = "v.1.0/api/";
 

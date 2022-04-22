@@ -27,7 +27,7 @@
         </activity>
 
         <activity android:name=".MainActivity" />
-        <activity android:name=".auth.TestActivity"  android:exported="true"/>
+        <activity android:name=".auth.AccountActivationActivity"  android:exported="true"/>
 
         <receiver android:name=".notifications.local.NotificationReciver" />
         <receiver

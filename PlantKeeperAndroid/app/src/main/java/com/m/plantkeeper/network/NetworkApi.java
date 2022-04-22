@@ -4,7 +4,7 @@ import com.m.plantkeeper.models.AuthResponse;
 import com.m.plantkeeper.models.Plant;
 import com.m.plantkeeper.models.PlantShortInfo;
 import com.m.plantkeeper.models.RegistrationInfo;
-import com.m.plantkeeper.models.dtos.PlantsInfoDto;
+import com.m.plantkeeper.models.UserPlant;
 import com.m.plantkeeper.models.dtos.UserInfoDto;
 import com.m.plantkeeper.models.dtos.UserPlantDto;
 
@@ -56,7 +56,7 @@ public interface NetworkApi {
     // -------------------------------------------------
 
     @POST("userplants/{hostUserId}/{plantId}")
-    Call<ResponseBody> addPlantToUserProfile(
+    Call<UserPlant> addPlantToUserProfile(
             @Header("Authorization") String token,
             @Path("hostUserId") int hostUserId,
             @Path("plantId") int plantId,

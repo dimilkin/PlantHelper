@@ -110,7 +110,7 @@ public class PlantsListFragment extends Fragment {
         Navigation navigation = new NavigationProviderImpl();
         PlantInfoFragment plantInfoFragment = new PlantInfoFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(PLANT_ID, userPlant.getId());
+        bundle.putInt(PLANT_ID, userPlant.getPlant().getId());
         bundle.putString(EXTRA_USER_PLANT_NAME, userPlant.getProvidedName());
         navigation.navigateToFragment(plantInfoFragment, getActivity(), R.id.mainFragmentContainer, bundle);
     }

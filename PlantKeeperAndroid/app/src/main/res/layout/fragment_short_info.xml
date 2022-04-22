@@ -38,8 +38,9 @@
             android:id="@+id/shortInfoContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
             android:text="Some text here"
-            android:textSize="18sp" />
+            android:textSize="22sp" />
 
     </ScrollView>
 

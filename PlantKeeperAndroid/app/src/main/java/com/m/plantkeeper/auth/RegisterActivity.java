@@ -73,4 +73,8 @@ public class RegisterActivity extends AppCompatActivity {
     private void navigateToLoginScreen() {
         navigation.navigateToActivity(this, LoginActivity.class);
     }
+
+    private void navigateToAccountActivation() {
+        navigation.navigateToActivity(this, AccountActivationActivity.class);
+    }
 }

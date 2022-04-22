@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.m.plantkeeper.R;
+import com.m.plantkeeper.models.UserPlant;
 import com.m.plantkeeper.models.dtos.UserPlantDto;
 import com.m.plantkeeper.navigation.Navigation;
 import com.m.plantkeeper.navigation.NavigationProviderImpl;
@@ -149,16 +150,18 @@ public class AddEditPlantFragment extends Fragment {
         userPlantDto.setWaterPeriod(waterInterval);
         userPlantDto.setProvidedName(providedName);
 
-        viewModel.createNewUserPlant(authToken, userid, plantId, userPlantDto).enqueue(new Callback<ResponseBody>() {
+        viewModel.createNewUserPlant(authToken, userid, plantId, userPlantDto).enqueue(new Callback<UserPlant>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+            public void onResponse(Call<UserPlant> call, Response<UserPlant> responsePlant) {
                 viewModel.savePlantDataFromServerToLocalStoarage(authToken, plantId);
                 viewModel.startNewAlarm(providedName, userPlantDto.getWaterPeriod(), plantId);
+
+                Toast.makeText(getActivity(), String.valueOf(responsePlant.body().getId()), Toast.LENGTH_SHORT).show();
                 navigation.navigateToPreviousFragment(getActivity());
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<UserPlant> call, Throwable t) {
                 Toast.makeText(getActivity(), "Failed to save plant", Toast.LENGTH_SHORT).show();
             }
         });

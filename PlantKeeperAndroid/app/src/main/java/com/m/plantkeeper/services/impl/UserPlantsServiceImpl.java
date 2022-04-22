@@ -1,5 +1,6 @@
 package com.m.plantkeeper.services.impl;
 
+import com.m.plantkeeper.models.UserPlant;
 import com.m.plantkeeper.models.dtos.UserInfoDto;
 import com.m.plantkeeper.models.dtos.UserPlantDto;
 import com.m.plantkeeper.network.NetworkProvider;
@@ -31,7 +32,7 @@ public class UserPlantsServiceImpl implements UserPlantsService {
     }
 
     @Override
-    public Call<ResponseBody> createNewUserPlant(String authToken, int userId, int plantid, UserPlantDto userPlantDto) {
+    public Call<UserPlant> createNewUserPlant(String authToken, int userId, int plantid, UserPlantDto userPlantDto) {
         return networkProvider.getConnection().addPlantToUserProfile(authToken, userId, plantid, userPlantDto);
     }
 }

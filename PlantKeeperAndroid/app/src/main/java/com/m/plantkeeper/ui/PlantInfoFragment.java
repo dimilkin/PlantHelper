@@ -119,34 +119,34 @@ public class PlantInfoFragment extends Fragment {
             openInfoFragment("Temperature", plant.getTemperature());
         });
         origin.setOnClickListener( v -> {
-            openInfoFragment("Watering", plant.getWatering());
+            openInfoFragment("Origin", plant.getOrigin());
         });
         size.setOnClickListener( v -> {
-            openInfoFragment("Watering", plant.getWatering());
+            openInfoFragment("Size", plant.getMaxGrowth());
         });
         toxicPets.setOnClickListener( v -> {
-            openInfoFragment("Watering", plant.getWatering());
+            openInfoFragment("Toxic To Pets", plant.getPoisonousForPets());
         });
         light.setOnClickListener( v -> {
-            openInfoFragment("Watering", plant.getWatering());
+            openInfoFragment("Light", plant.getLight());
         });
         repotting.setOnClickListener( v -> {
-            openInfoFragment("Watering", plant.getWatering());
+            openInfoFragment("Repotting", plant.getRePotting());
         });
         airHumidity.setOnClickListener( v -> {
-            openInfoFragment("Watering", plant.getWatering());
+            openInfoFragment("Air Humidity", plant.getAirHumidity());
         });
         bestGrows.setOnClickListener( v -> {
-            openInfoFragment("Watering", plant.getWatering());
+            openInfoFragment("Best Grows", plant.getWhereItGrowsBest());
         });
         scientificNames.setOnClickListener( v -> {
-            openInfoFragment("Watering", plant.getWatering());
+            openInfoFragment("Scientific Name", plant.getScientificName());
         });
         additionalInfo.setOnClickListener( v -> {
-            openInfoFragment("Watering", plant.getWatering());
+            openInfoFragment("Additional Info", plant.getWatering());
         });
         potentialProblems.setOnClickListener( v -> {
-            openInfoFragment("Watering", plant.getWatering());
+            openInfoFragment("Potential Problems", plant.getWatering());
         });
     }
 

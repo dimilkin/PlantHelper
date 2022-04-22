@@ -49,6 +49,13 @@ public class ShortInfoFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        titleText.clearComposingText();
+        contentText.clearComposingText();
+    }
+
     private void initializeView(View view) {
         closeButton = view.findViewById(R.id.shortInfoCloseButton);
         titleText = view.findViewById(R.id.shortInfoTitle);

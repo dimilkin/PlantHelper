@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import com.m.plantkeeper.models.Plant;
+import com.m.plantkeeper.models.UserPlant;
 import com.m.plantkeeper.models.dtos.UserPlantDto;
 import com.m.plantkeeper.notifications.local.AlarmProvider;
 import com.m.plantkeeper.services.PlantsInfoService;
@@ -36,7 +37,7 @@ public class AddEditPlantViewModel extends AndroidViewModel {
         alarmProvider = new AlarmProvider(application.getApplicationContext());
     }
 
-    public Call<ResponseBody> createNewUserPlant(String authToken, int userid, int plantId, UserPlantDto userPlantDto) {
+    public Call<UserPlant> createNewUserPlant(String authToken, int userid, int plantId, UserPlantDto userPlantDto) {
         return userPlantsService.createNewUserPlant(authToken, userid, plantId, userPlantDto);
     }
 
