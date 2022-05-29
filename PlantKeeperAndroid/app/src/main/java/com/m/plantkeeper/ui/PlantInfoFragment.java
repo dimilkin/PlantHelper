@@ -3,7 +3,7 @@ package com.m.plantkeeper.ui;
 import static com.m.plantkeeper.Constants.EXTRA_PLANT_INFO_BODY;
 import static com.m.plantkeeper.Constants.EXTRA_PLANT_INFO_TITLE;
 import static com.m.plantkeeper.Constants.EXTRA_USER_PLANT_NAME;
-import static com.m.plantkeeper.Constants.PLANT_ID;
+import static com.m.plantkeeper.Constants.EXTRA_PLANT_ID;
 
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -23,6 +23,8 @@ import com.m.plantkeeper.models.Plant;
 import com.m.plantkeeper.models.UserPlant;
 import com.m.plantkeeper.navigation.Navigation;
 import com.m.plantkeeper.navigation.NavigationProviderImpl;
+import com.m.plantkeeper.services.AuthService;
+import com.m.plantkeeper.services.impl.AuthServiceImpl;
 import com.m.plantkeeper.viewmodels.PlantInfoViewModel;
 
 import java.util.concurrent.ExecutionException;
@@ -80,7 +82,7 @@ public class PlantInfoFragment extends Fragment {
         Bundle mBundle = getArguments();
         if (mBundle != null) {
             UserPlant userPlant = new UserPlant();
-            userPlant.setId(mBundle.getInt(PLANT_ID));
+            userPlant.setId(mBundle.getInt(EXTRA_PLANT_ID));
             userPlant.setProvidedName(mBundle.getString(EXTRA_USER_PLANT_NAME));
             return userPlant;
         }

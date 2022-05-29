@@ -1,20 +1,22 @@
 package com.m.plantkeeper.ui;
 
+import static com.m.plantkeeper.Constants.EXTRA_PLANT_CHOICE;
+import static com.m.plantkeeper.Constants.EXTRA_PLANT_ID;
+import static com.m.plantkeeper.Constants.EXTRA_PLANT_SCI_NAME;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.m.plantkeeper.R;
 import com.m.plantkeeper.models.PlantShortInfo;
@@ -95,9 +97,9 @@ public class PlantNameSearchFragment extends Fragment {
 
     private void sendInfoBackToAddEditFragment(PlantShortInfo plantShortInfo) {
         Bundle bundle = new Bundle();
-        bundle.putString("PLANT_SCI_NAME", plantShortInfo.getScientificName());
-        bundle.putInt("PLANT_ID", plantShortInfo.getId());
-        getParentFragmentManager().setFragmentResult("PLANT_CHOICE", bundle);
+        bundle.putString(EXTRA_PLANT_SCI_NAME, plantShortInfo.getScientificName());
+        bundle.putInt(EXTRA_PLANT_ID, plantShortInfo.getId());
+        getParentFragmentManager().setFragmentResult(EXTRA_PLANT_CHOICE, bundle);
         navigation.navigateToPreviousFragment(getActivity());
     }
 }

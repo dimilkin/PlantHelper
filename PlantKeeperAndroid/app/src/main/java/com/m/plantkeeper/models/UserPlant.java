@@ -1,10 +1,18 @@
 package com.m.plantkeeper.models;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "user_plants")
 public class UserPlant {
+
+    @PrimaryKey(autoGenerate = true)
     private int id;
     private int waterPeriod;
     private String providedName;
-    private Plant plant;
+    private int plantId;
+    private int userOwnerId;
+    private int assugnedUserId;
 
     public UserPlant() {
     }
@@ -33,11 +41,27 @@ public class UserPlant {
         this.providedName = providedName;
     }
 
-    public Plant getPlant() {
-        return plant;
+    public int getPlantId() {
+        return plantId;
     }
 
-    public void setPlant(Plant plant) {
-        this.plant = plant;
+    public void setPlantId(int plantId) {
+        this.plantId = plantId;
+    }
+
+    public int getUserOwnerId() {
+        return userOwnerId;
+    }
+
+    public void setUserOwnerId(int userOwnerId) {
+        this.userOwnerId = userOwnerId;
+    }
+
+    public int getAssugnedUserId() {
+        return assugnedUserId;
+    }
+
+    public void setAssugnedUserId(int assugnedUserId) {
+        this.assugnedUserId = assugnedUserId;
     }
 }

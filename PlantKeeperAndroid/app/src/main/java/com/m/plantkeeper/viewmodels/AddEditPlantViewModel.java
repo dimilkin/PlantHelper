@@ -19,7 +19,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 public class AddEditPlantViewModel extends AndroidViewModel {
@@ -33,36 +32,28 @@ public class AddEditPlantViewModel extends AndroidViewModel {
     public AddEditPlantViewModel(@NonNull Application application) {
         super(application);
         plantsInfoService = PlantsInfoServiceImpl.getInstance(application);
-        userPlantsService = UserPlantsServiceImpl.getInstance();
+        userPlantsService = UserPlantsServiceImpl.getInstance(application);
         alarmProvider = new AlarmProvider(application.getApplicationContext());
     }
 
-    public Call<UserPlant> createNewUserPlant(String authToken, int userid, int plantId, UserPlantDto userPlantDto) {
-        return userPlantsService.createNewUserPlant(authToken, userid, plantId, userPlantDto);
+    public Call<UserPlant> createNewUserPlant(String authToken, int userid, int plantId, UserPlant userPlantDto) {
+        return userPlantsService.createNewUserPlantOnServer(authToken, userid, plantId, userPlantDto);
+    }
+
+    public Call<UserPlant> updateUserPlant(String authToken, int userid, int plantId, UserPlant userPlantDto) {
+        return userPlantsService.updateUserPlantOnServer(authToken, userid, plantId, userPlantDto);
     }
 
     public void startNewAlarm(String name, int waterPeriodDays, int intentId){
         alarmProvider.startAlarm(name, waterPeriodDays, intentId);
     }
 
-    public void savePlantDataFromServerToLocalStoarage(String authToken, int plantId) {
-        if (plantsInfoService.plantExistsInStorage(plantId)){
-            return;
-        }
-        disposable.add(plantsInfoService.getInfoForPlantByIdFromServer(authToken, plantId)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableSingleObserver<Plant>() {
-                    @Override
-                    public void onSuccess(Plant plant) {
-                        plantsInfoService.savePlantDataFromServerToLocalStoarage(plant);
-                    }
+    public void saveUserPlantToLocalStorage(UserPlant userPlant){
+        userPlantsService.saveUserPlantToLocalStorage(userPlant);
+    }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e("Error:", "Failed to add plant to local storage", e);
-                    }
-                }));
+    public void updateUserPlantToLocalStorage(UserPlant userPlant){
+        userPlantsService.updateUserPlantToLocalStorage(userPlant);
     }
 
     @Override

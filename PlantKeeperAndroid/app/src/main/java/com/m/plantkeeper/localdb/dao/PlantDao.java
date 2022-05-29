@@ -15,13 +15,13 @@ import java.util.List;
 public interface PlantDao {
 
     @Insert
-    void insert(Plant child);
+    void insert(Plant plant);
 
     @Update
-    void update(Plant child);
+    void update(Plant plant);
 
     @Delete
-    void delete(Plant child);
+    void delete(Plant plant);
 
     @Query("SELECT * FROM plants_info ORDER BY id DESC")
     LiveData<List<Plant>> getAllPlants();

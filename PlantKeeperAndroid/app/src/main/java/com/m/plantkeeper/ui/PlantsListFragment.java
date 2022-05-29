@@ -1,10 +1,10 @@
 package com.m.plantkeeper.ui;
 
+import static com.m.plantkeeper.Constants.EXTRA_USER_PLANT_ID;
 import static com.m.plantkeeper.Constants.EXTRA_USER_PLANT_NAME;
-import static com.m.plantkeeper.Constants.PLANT_ID;
+import static com.m.plantkeeper.Constants.EXTRA_PLANT_ID;
+import static com.m.plantkeeper.Constants.UPDATE_USER_PLANT;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,6 +28,8 @@ import com.m.plantkeeper.navigation.Navigation;
 import com.m.plantkeeper.navigation.NavigationProviderImpl;
 import com.m.plantkeeper.ui.adapters.MainPlantsListAdapter;
 import com.m.plantkeeper.viewmodels.MainPlantsListViewModel;
+
+import java.util.concurrent.ExecutionException;
 
 public class PlantsListFragment extends Fragment {
 
@@ -53,20 +56,17 @@ public class PlantsListFragment extends Fragment {
         Bundle bundle = this.getArguments();
         String token = bundle.getString("AUTHTOKEN");
         int userId = bundle.getInt("USERID");
-        viewModel.initializePlants(token, userId);
 
-        recyclerView = view.findViewById(R.id.plantsRecyclerView);
-        adapter = new MainPlantsListAdapter();
+        try {
+            viewModel.initializeUserPlants(token, userId);
+        } catch (ExecutionException | InterruptedException exception) {
+            Log.e("ERROR : ", "Data is missing", exception);
+            exception.printStackTrace();
+        }
+        initializeView(view);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
-                DividerItemDecoration.VERTICAL));
-        recyclerView.setAdapter(adapter);
-        observePlants();
-
-        adapter.setAdapterClickListener(userPlant -> {
-            navigateToPlantInfoFragment(userPlant);
-        });
+        adapter.setAdapterClickListener(this::navigateToPlantInfoFragment);
+        adapter.setAdapterLongClickListener(this::navigateToEdditPlant);
         return view;
     }
 
@@ -82,7 +82,7 @@ public class PlantsListFragment extends Fragment {
     }
 
     private void observePlants() {
-        viewModel.getPlantsList().observe(getViewLifecycleOwner(), plants -> {
+        viewModel.getUserPlantsList().observe(getViewLifecycleOwner(), plants -> {
             adapter.submitList(plants);
             adapter.notifyDataSetChanged();
         });
@@ -106,12 +106,33 @@ public class PlantsListFragment extends Fragment {
         navigation.navigateToFragment(addEditPlantFragment, getActivity(), R.id.mainFragmentContainer);
     }
 
+    private void navigateToEdditPlant(UserPlant userPlant) {
+        Navigation navigation = new NavigationProviderImpl();
+        AddEditPlantFragment addEditPlantFragment = new AddEditPlantFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(EXTRA_PLANT_ID, userPlant.getPlantId());
+        bundle.putString(EXTRA_USER_PLANT_NAME, userPlant.getProvidedName());
+        bundle.putInt(EXTRA_USER_PLANT_ID, userPlant.getId());
+        getParentFragmentManager().setFragmentResult(UPDATE_USER_PLANT, bundle);
+        navigation.navigateToFragment(addEditPlantFragment, getActivity(), R.id.mainFragmentContainer, bundle);
+    }
+
     private void navigateToPlantInfoFragment(UserPlant userPlant) {
         Navigation navigation = new NavigationProviderImpl();
         PlantInfoFragment plantInfoFragment = new PlantInfoFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(PLANT_ID, userPlant.getPlant().getId());
+        bundle.putInt(EXTRA_PLANT_ID, userPlant.getPlantId());
         bundle.putString(EXTRA_USER_PLANT_NAME, userPlant.getProvidedName());
         navigation.navigateToFragment(plantInfoFragment, getActivity(), R.id.mainFragmentContainer, bundle);
+    }
+
+    private void initializeView(View view){
+        recyclerView = view.findViewById(R.id.plantsRecyclerView);
+        adapter = new MainPlantsListAdapter();
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
+                DividerItemDecoration.VERTICAL));
+        recyclerView.setAdapter(adapter);
+        observePlants();
     }
 }

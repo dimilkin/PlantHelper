@@ -58,13 +58,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void getCredentials(boolean isAuthenticated) {
         if (isAuthenticated) {
-            authViewModel.getCredentials().observe(this, credentials -> {
-                SharedPreferences preferences = getSharedPreferences("UserAuthInfo", Context.MODE_PRIVATE);
-                preferences.edit()
-                        .putString("AUTHTOKEN", credentials.getUserToken())
-                        .putInt("USERID", credentials.getUserId())
-                        .apply();
-            });
             navigation.navigateToActivity(this, MainActivity.class);
         } else {
             Toast.makeText(this, "Authentication Failed", Toast.LENGTH_SHORT).show();

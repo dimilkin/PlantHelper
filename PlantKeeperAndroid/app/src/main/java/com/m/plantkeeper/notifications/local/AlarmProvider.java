@@ -1,9 +1,8 @@
 package com.m.plantkeeper.notifications.local;
 
 import static android.app.PendingIntent.FLAG_ONE_SHOT;
-import static com.m.plantkeeper.Constants.EXTRA_PLANT_NAME;
 import static com.m.plantkeeper.Constants.EXTRA_USER_PLANT_NAME;
-import static com.m.plantkeeper.Constants.WATER_PERIOD;
+import static com.m.plantkeeper.Constants.EXTRA_WATER_PERIOD;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -32,7 +31,7 @@ public class AlarmProvider extends ContextWrapper {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent alarmIntent = new Intent(getApplicationContext(), NotificationReciver.class);
         alarmIntent.putExtra(EXTRA_USER_PLANT_NAME, name);
-        alarmIntent.putExtra(WATER_PERIOD, waterPeriodDays);
+        alarmIntent.putExtra(EXTRA_WATER_PERIOD, waterPeriodDays);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), intentID, alarmIntent, FLAG_ONE_SHOT);
 
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

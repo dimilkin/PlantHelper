@@ -3,6 +3,7 @@ package com.m.plantkeeper.models;
 public class AuthResponse {
 
     private int userId;
+    private String userEmail;
 
     public AuthResponse() {
     }
@@ -11,7 +12,7 @@ public class AuthResponse {
         return userId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public String getUserEmail() {
+        return userEmail;
     }
 }

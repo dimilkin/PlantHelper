@@ -1,7 +1,8 @@
 package com.m.plantkeeper.services.impl;
 
-import com.m.plantkeeper.models.AuthResponse;
+import com.m.plantkeeper.models.AuthCredentials;
 import com.m.plantkeeper.models.RegistrationInfo;
+import com.m.plantkeeper.models.dtos.AccountActivationDto;
 import com.m.plantkeeper.network.NetworkProvider;
 import com.m.plantkeeper.services.AuthService;
 
@@ -13,6 +14,7 @@ public class AuthServiceImpl implements AuthService {
 
     private static AuthServiceImpl instance;
     private NetworkProvider networkProvider;
+    private AuthCredentials authCredentials;
 
     private AuthServiceImpl() {
         networkProvider = new NetworkProvider();
@@ -34,5 +36,20 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public Single<ResponseBody> registerNewUser(RegistrationInfo registrationInfo) {
         return networkProvider.getConnection().registerNewUser(registrationInfo);
+    }
+
+    @Override
+    public Call<ResponseBody> activateNewUser(AccountActivationDto accountActivationDt) {
+        return networkProvider.getConnection().activateNewUser(accountActivationDt);
+    }
+
+    @Override
+    public AuthCredentials getAuthCredentials() {
+        return authCredentials;
+    }
+
+    @Override
+    public void setAuthCredentials(AuthCredentials authCredentials) {
+        this.authCredentials = authCredentials;
     }
 }

@@ -2,7 +2,6 @@ package com.m.plantkeeper.services.impl;
 
 import android.app.Application;
 import android.content.res.Resources;
-import android.util.Log;
 
 import com.m.plantkeeper.localdb.PlantsRepository;
 import com.m.plantkeeper.models.Plant;
@@ -14,8 +13,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Single;
-import io.reactivex.observers.DisposableSingleObserver;
-import io.reactivex.schedulers.Schedulers;
 
 public class PlantsInfoServiceImpl implements PlantsInfoService {
 
@@ -61,17 +58,5 @@ public class PlantsInfoServiceImpl implements PlantsInfoService {
     @Override
     public boolean plantExistsInStorage(int plantId) {
         return plantsRepository.plantWithIdExists(plantId);
-    }
-
-    private void insertPlantIntoLocalStorage(Plant plant) {
-        plantsRepository.insert(plant);
-    }
-
-    private void updatePlantIntoLocalStorage(Plant plant) {
-        plantsRepository.update(plant);
-    }
-
-    private void deletePlantFromLocalStorage(Plant plant) {
-        plantsRepository.delete(plant);
     }
 }

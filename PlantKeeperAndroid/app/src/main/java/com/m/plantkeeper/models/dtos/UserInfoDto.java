@@ -8,8 +8,8 @@ public class UserInfoDto {
 
     private int id;
     private String email;
-    private List<UserPlant> ownPlants;
-    private List<UserPlant> assignedPlants;
+    private List<UserPlantDto> ownPlants;
+    private List<UserPlantDto> assignedPlants;
 
     public UserInfoDto() {
     }
@@ -30,19 +30,19 @@ public class UserInfoDto {
         this.email = email;
     }
 
-    public List<UserPlant> getOwnPlants() {
+    public List<UserPlantDto> getOwnPlants() {
         return ownPlants;
     }
 
-    public void setOwnPlants(List<UserPlant> ownPlants) {
+    public void setOwnPlants(List<UserPlantDto> ownPlants) {
         this.ownPlants = ownPlants;
     }
 
-    public List<UserPlant> getAssignedPlants() {
+    public List<UserPlantDto> getAssignedPlants() {
         return assignedPlants;
     }
 
-    public void setAssignedPlants(List<UserPlant> assignedPlants) {
+    public void setAssignedPlants(List<UserPlantDto> assignedPlants) {
         this.assignedPlants = assignedPlants;
     }
 }

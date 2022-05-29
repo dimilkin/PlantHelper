@@ -5,6 +5,7 @@ import com.m.plantkeeper.models.Plant;
 import com.m.plantkeeper.models.PlantShortInfo;
 import com.m.plantkeeper.models.RegistrationInfo;
 import com.m.plantkeeper.models.UserPlant;
+import com.m.plantkeeper.models.dtos.AccountActivationDto;
 import com.m.plantkeeper.models.dtos.UserInfoDto;
 import com.m.plantkeeper.models.dtos.UserPlantDto;
 
@@ -34,6 +35,11 @@ public interface NetworkApi {
             @Body RegistrationInfo registrationInfo
     );
 
+    @POST("user/activation")
+    Call<ResponseBody> activateNewUser(
+            @Body AccountActivationDto accountActivationDt
+    );
+
     @GET("user/profile/{userId}")
     Single<UserInfoDto> getInfoForUser(
             @Header("Authorization") String token,
@@ -60,7 +66,15 @@ public interface NetworkApi {
             @Header("Authorization") String token,
             @Path("hostUserId") int hostUserId,
             @Path("plantId") int plantId,
-            @Body UserPlantDto userPlantDto
+            @Body UserPlant userPlantDto
+    );
+
+    @PUT("userplants/{hostUserId}/{plantId}")
+    Call<UserPlant> updateUserPlant(
+            @Header("Authorization") String token,
+            @Path("hostUserId") int hostUserId,
+            @Path("plantId") int plantId,
+            @Body UserPlant userPlantDto
     );
 
     @DELETE("userplants/{hostUserId}/{plantId}")

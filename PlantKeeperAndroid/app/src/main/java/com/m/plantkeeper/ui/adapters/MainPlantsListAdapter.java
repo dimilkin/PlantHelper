@@ -22,6 +22,7 @@ import java.util.Random;
 public class MainPlantsListAdapter extends ListAdapter<UserPlant, MainPlantsListAdapter.PlantsHolder> {
 
     private AdapterClickListener adapterClickListener;
+    private AdapterLongClickListener adapterLongClickListener;
 
     public MainPlantsListAdapter() {
         super(DIFF_CALLBACK);
@@ -85,14 +86,31 @@ public class MainPlantsListAdapter extends ListAdapter<UserPlant, MainPlantsList
                 }
             });
 
+            itemView.setOnLongClickListener(v -> {
+                int position = getAdapterPosition();
+                if (adapterLongClickListener != null && position != RecyclerView.NO_POSITION) {
+                    adapterLongClickListener.onAdapterLongClick(getItem(position));
+                }
+                return true;
+            });
+
         }
+    }
+
+    public void setAdapterClickListener(AdapterClickListener adapterClickListener){
+        this.adapterClickListener = adapterClickListener;
+    }
+
+    public void setAdapterLongClickListener(AdapterLongClickListener adapterLongClickListener) {
+        this.adapterLongClickListener = adapterLongClickListener;
     }
 
     public interface AdapterClickListener {
         void onAdapterClick(UserPlant plantItem);
     }
 
-    public void setAdapterClickListener(AdapterClickListener adapterClickListener){
-        this.adapterClickListener = adapterClickListener;
+    public interface AdapterLongClickListener {
+        void onAdapterLongClick(UserPlant userPlant);
     }
+
 }

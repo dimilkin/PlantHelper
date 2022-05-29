@@ -1,8 +1,7 @@
 package com.m.plantkeeper.notifications.local;
 
-import static com.m.plantkeeper.Constants.EXTRA_PLANT_NAME;
 import static com.m.plantkeeper.Constants.EXTRA_USER_PLANT_NAME;
-import static com.m.plantkeeper.Constants.WATER_PERIOD;
+import static com.m.plantkeeper.Constants.EXTRA_WATER_PERIOD;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -29,10 +28,10 @@ public class NotificationReciver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String plantName = intent.getStringExtra(EXTRA_USER_PLANT_NAME);
-        int waterPeriod = intent.getIntExtra(WATER_PERIOD, -1);
+        int waterPeriod = intent.getIntExtra(EXTRA_WATER_PERIOD, -1);
         Intent notifyIntent = new Intent(context, MainActivity.class);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        notifyIntent.putExtra(WATER_PERIOD, waterPeriod);
+        notifyIntent.putExtra(EXTRA_WATER_PERIOD, waterPeriod);
         PendingIntent notifyPendingIntent = PendingIntent.getActivity(
                 context, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT
         );

@@ -73,8 +73,8 @@
                 style="@style/styled_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="25"
                 android:layout_margin="10dp"
+                android:layout_weight="25"
                 android:text="Sign Up" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -82,17 +82,17 @@
                 style="@style/styled_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="50"
                 android:layout_margin="10dp"
+                android:layout_weight="50"
                 android:text="Sign In" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/forgotPasswordText"
+            style="@style/TextStylePrimary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="I Forgot My Password"
-            style="@style/TextStylePrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
