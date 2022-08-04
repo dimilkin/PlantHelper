@@ -40,7 +40,7 @@ import retrofit2.Response;
 
 public class AddEditPlantFragment extends Fragment {
 
-    private Button choosePlantTypeButton, setDaysButton, setWeeksButton, savePlantButton;
+    private Button choosePlantTypeButton, setDaysButton, setWeeksButton, savePlantButton, cancelBtn;
     private EditText setPlantNameTextField;
     private TextView plantTypeTextView;
     private NumberPicker intervalNumberPicker;
@@ -117,11 +117,14 @@ public class AddEditPlantFragment extends Fragment {
             final int finalPlantId = plantId;
             final int waterPeriod = timeInterval[0];
             if (isInUpdateMode) {
-                updateUserPlant(waterPeriod, finalUserId, finalPlantId, finalAuthToken);
+                updateUserPlantAction(waterPeriod, finalUserId, finalPlantId, finalAuthToken);
                 return;
             }
-            saveNewUserPlant(waterPeriod, finalUserId, finalPlantId, finalAuthToken);
+            saveNewUserPlantAction(waterPeriod, finalUserId, finalPlantId, finalAuthToken);
         });
+
+        cancelBtn.setOnClickListener( v -> getParentFragmentManager().popBackStack());
+
         return view;
     }
 
@@ -143,6 +146,7 @@ public class AddEditPlantFragment extends Fragment {
         setWeeksButton = view.findViewById(R.id.setWeeksButton);
         savePlantButton = view.findViewById(R.id.savePlantButton);
         intervalNumberPicker = view.findViewById(R.id.periodNumbersPicker);
+        cancelBtn = view.findViewById(R.id.cancelPlantButton);
     }
 
     private void setUpNumberPicker() {
@@ -172,27 +176,27 @@ public class AddEditPlantFragment extends Fragment {
         choosePlantTypeButton.setClickable(false);
     }
 
-    private void updateUserPlant(int waterInterval, int userid, int plantId, String authToken) {
-        UserPlant userPlantDto = generateuserPlantDto(waterInterval);
+    private void updateUserPlantAction(int waterInterval, int userid, int plantId, String authToken) {
+        UserPlant userPlantDto = generateUserPlantDto(waterInterval);
         userPlantDto.setId(userPlantId);
-        callBackEnd(addEditPlantViewModel.updateUserPlant(authToken, userid, plantId, userPlantDto), authToken, userPlantDto);
+        updateUserPlantAction(authToken, userid, userPlantDto);
         Toast.makeText(getActivity(), "Updated", Toast.LENGTH_SHORT).show();
     }
 
-    private void saveNewUserPlant(int waterInterval, int userid, int plantId, String authToken) {
-        UserPlant userPlantDto = generateuserPlantDto(waterInterval);
+    private void saveNewUserPlantAction(int waterInterval, int userid, int plantId, String authToken) {
+        UserPlant userPlantDto = generateUserPlantDto(waterInterval);
         userPlantDto.setUserOwnerId(userid);
         userPlantDto.setPlantId(plantId);
-        callBackEnd(addEditPlantViewModel.createNewUserPlant(authToken, userid, plantId, userPlantDto), authToken, userPlantDto);
+        saveUserPlant(authToken, userid, userPlantDto);
         Toast.makeText(getActivity(), "Saved", Toast.LENGTH_SHORT).show();
     }
 
-    private UserPlant generateuserPlantDto (int waterInterval){
+    private UserPlant generateUserPlantDto(int waterInterval) {
         UserPlant userPlantDto = new UserPlant();
         if (weeksChosen) {
             waterInterval = waterInterval * 7;
         }
-        if (providedName == null) {
+        if (providedName == null || providedName.trim().length() <= 0) {
             providedName = setPlantNameTextField.getText().toString();
         }
         userPlantDto.setWaterPeriod(waterInterval);
@@ -200,17 +204,43 @@ public class AddEditPlantFragment extends Fragment {
         return userPlantDto;
     }
 
-    private void callBackEnd(Call<UserPlant> userPlantCall, String authToken, UserPlant userPlantDto ){
-        userPlantCall.enqueue(new Callback<UserPlant>() {
+    private void updateUserPlantAction(String authToken, int userid, UserPlant userPlantDto){
+        addEditPlantViewModel.updateUserPlant(authToken, userid, plantId, userPlantDto)
+                .enqueue(new Callback<UserPlant>() {
+            @Override
+            public void onResponse(Call<UserPlant> call, Response<UserPlant> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(getContext(), "Update Failed ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                addEditPlantViewModel.startNewAlarm(providedName, userPlantDto.getWaterPeriod(), plantId);
+                userPlantDto.setPlantId(plantId);
+                userPlantDto.setUserOwnerId(userid);
+                addEditPlantViewModel.updateUserPlantToLocalStorage(userPlantDto);
+                navigation.navigateToPreviousFragment(getActivity());
+            }
+
+            @Override
+            public void onFailure(Call<UserPlant> call, Throwable t) {
+                Toast.makeText(getContext(), "Update Failed ", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void saveUserPlant(String authToken, int userid, UserPlant userPlantDto) {
+        addEditPlantViewModel.createNewUserPlant(authToken, userid, plantId, userPlantDto).enqueue(new Callback<UserPlant>() {
             @Override
             public void onResponse(Call<UserPlant> call, Response<UserPlant> responsePlant) {
+                if (!responsePlant.isSuccessful()) {
+                    Toast.makeText(getContext(), "Saving Failed ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 plantInfoViewModel.savePlantDataFromServerToLocalStoarage(authToken, plantId);
                 addEditPlantViewModel.startNewAlarm(providedName, userPlantDto.getWaterPeriod(), plantId);
                 userPlantDto.setId(responsePlant.body().getId());
                 addEditPlantViewModel.saveUserPlantToLocalStorage(userPlantDto);
                 navigation.navigateToPreviousFragment(getActivity());
             }
-
             @Override
             public void onFailure(Call<UserPlant> call, Throwable t) {
                 Toast.makeText(getActivity(), "Failed to save plant", Toast.LENGTH_SHORT).show();

@@ -18,10 +18,13 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.m.plantkeeper.R;
 import com.m.plantkeeper.models.PlantShortInfo;
 import com.m.plantkeeper.navigation.Navigation;
 import com.m.plantkeeper.navigation.NavigationProviderImpl;
+import com.m.plantkeeper.services.AuthService;
+import com.m.plantkeeper.services.impl.AuthServiceImpl;
 import com.m.plantkeeper.ui.adapters.PlantsSearchAdapter;
 import com.m.plantkeeper.viewmodels.PlantsSearchViewModel;
 
@@ -36,6 +39,8 @@ public class PlantNameSearchFragment extends Fragment {
     private SearchView searchView;
     private List<PlantShortInfo> plants;
     private Navigation navigation;
+    private AuthService authService;
+    private CircularProgressIndicator progressIndicator;
 
     public PlantNameSearchFragment() {
         // Required empty public constructor
@@ -46,18 +51,17 @@ public class PlantNameSearchFragment extends Fragment {
         super.onCreate(savedInstanceState);
         plants = new ArrayList<>();
         navigation = new NavigationProviderImpl();
+        authService = AuthServiceImpl.getAuthInstance();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_plant_name_search, container, false);
-        searchView = view.findViewById(R.id.searchPlantSearchView);
-        recyclerView = view.findViewById(R.id.plantSearchRecyclerView);
+        initializeUiElements(view);
         viewModel = new ViewModelProvider(requireActivity()).get(PlantsSearchViewModel.class);
 
-        SharedPreferences prefs = getActivity().getSharedPreferences("UserAuthInfo", Context.MODE_PRIVATE);
-        String authToken = "Bearer " + prefs.getString("AUTHTOKEN", "AuthToken missing");
+        String authToken = authService.getAuthCredentials().getUserToken();
         adapter = new PlantsSearchAdapter(plants);
         if (plants.isEmpty()) {
             viewModel.getShortInfoForPlants(authToken);
@@ -84,14 +88,21 @@ public class PlantNameSearchFragment extends Fragment {
         return view;
     }
 
-    // TODO -> this logic can be improved by moving the check logic from the viw model to this field
-    //  - so as to call viewModel.getShortInfoForPlants(authToken); only if the mutable live data is empty
+    private void initializeUiElements(View view) {
+        searchView = view.findViewById(R.id.searchPlantSearchView);
+        recyclerView = view.findViewById(R.id.plantSearchRecyclerView);
+        recyclerView.setVisibility(View.GONE);
+        progressIndicator = view.findViewById(R.id.searchPlantsProgressIndicator);
+        progressIndicator.show();
+    }
 
     private void loadPlantsShortInfo() {
         viewModel.getPlantsInfoList().observe(getViewLifecycleOwner(), plantShortInfoList -> {
                 plants.addAll(plantShortInfoList);
                 adapter.submitList(plants);
                 adapter.notifyDataSetChanged();
+                progressIndicator.hide();
+                recyclerView.setVisibility(View.VISIBLE);
         });
     }
 

@@ -6,8 +6,8 @@ import androidx.lifecycle.LiveData;
 
 import com.m.plantkeeper.localdb.UserPlantsRepository;
 import com.m.plantkeeper.models.UserPlant;
+import com.m.plantkeeper.models.dtos.PlantResponseBody;
 import com.m.plantkeeper.models.dtos.UserInfoDto;
-import com.m.plantkeeper.models.dtos.UserPlantDto;
 import com.m.plantkeeper.network.NetworkProvider;
 import com.m.plantkeeper.services.UserPlantsService;
 
@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Single;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 public class UserPlantsServiceImpl implements UserPlantsService {
@@ -73,6 +72,16 @@ public class UserPlantsServiceImpl implements UserPlantsService {
 
     @Override
     public void saveListOfUserPlantsToStorage(List<UserPlant> userPlantList) {
-            userPlantList.forEach(this::saveUserPlantToLocalStorage);
+        userPlantList.forEach(this::saveUserPlantToLocalStorage);
+    }
+
+    @Override
+    public Call<PlantResponseBody> deleteUserPlant(String authToken, UserPlant userPlant) {
+        return networkProvider.getConnection().removePlantFromUserProfile(authToken, userPlant.getUserOwnerId(), userPlant.getId());
+    }
+
+    @Override
+    public void deleteUserPlantFromLocalStorage(UserPlant userPlant) {
+        userPlantsRepository.delete(userPlant);
     }
 }

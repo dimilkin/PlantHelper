@@ -2,6 +2,15 @@ package com.m.plantkeeper.auth;
 
 import static com.m.plantkeeper.Constants.EXTRA_USER_EMAIL;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -9,21 +18,16 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.m.plantkeeper.R;
 import com.m.plantkeeper.models.RegistrationInfo;
 import com.m.plantkeeper.navigation.Navigation;
 import com.m.plantkeeper.navigation.NavigationProviderImpl;
+import com.m.plantkeeper.services.HashingService;
+import com.m.plantkeeper.services.impl.HashingServiceImpl;
 import com.m.plantkeeper.viewmodels.AuthActivityViewModel;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.InputMismatchException;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -35,6 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Navigation navigation;
     private AuthActivityViewModel authViewModel;
     private ActivityResultLauncher<Intent> activityForResultLauncher;
+    private HashingService hashingService;
 
 
     @Override
@@ -44,11 +49,50 @@ public class RegisterActivity extends AppCompatActivity {
 
         setUpUiElements();
         setupActivityForResultLauncher();
+        hashingService = new HashingServiceImpl();
 
-        signUpBtn.setOnClickListener(view -> registerNewUser());
+        signUpBtn.setOnClickListener(view -> {
+            try {
+                registerNewUser();
+            } catch (NoSuchAlgorithmException e) {
+                Log.e("HASHING ERROR : ", e.getMessage());
+                e.printStackTrace();
+                Toast.makeText(this, "Sign Up Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
         iHaveAnAccountText.setOnClickListener(view -> navigateToLoginScreen());
     }
 
+    private void registerNewUser() throws NoSuchAlgorithmException {
+        String email = emailField.getText().toString();
+        String password = passwordField.getText().toString();
+        String repeatedPassword = repeatPaswordField.getText().toString();
+        try {
+            verifyString(email);
+            verifyString(password);
+            verifyString(repeatedPassword);
+            matchPasswords(password, repeatedPassword);
+        } catch (InputMismatchException exception) {
+            return;
+        }
+        showProgressIndicator();
+        String hashedPass = hashingService.hashData(password);
+        RegistrationInfo registrationInfo = new RegistrationInfo(email, hashedPass);
+        registerUserInfo(registrationInfo);
+    }
+
+    private void registerUserInfo(RegistrationInfo registrationInfod) {
+        authViewModel.registerNewUser(registrationInfod);
+        authViewModel.isUserRegistered().observe(this, successfulRegistration -> {
+            if (successfulRegistration) {
+                Toast.makeText(this, "Registaration Successful! Please confirm email!", Toast.LENGTH_LONG).show();
+                requestProfileActivation(registrationInfod.getEmail());
+            } else {
+                Toast.makeText(this, "Invalid mail! Registration Failed!", Toast.LENGTH_SHORT).show();
+                hideProgressIndicator();
+            }
+        });
+    }
     private void requestProfileActivation(String userMail) {
         Intent intent = new Intent(this, AccountActivationActivity.class);
         intent.putExtra(EXTRA_USER_EMAIL, userMail);
@@ -63,36 +107,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void registerNewUser() {
-        String email = emailField.getText().toString();
-        String password = passwordField.getText().toString();
-        String repeatedPassword = repeatPaswordField.getText().toString();
-        try {
-            verifyString(email);
-            verifyString(password);
-            verifyString(repeatedPassword);
-            matchPasswords(password, repeatedPassword);
-        } catch (InputMismatchException exception) {
-            return;
-        }
-        showProgressIndicator();
-        RegistrationInfo registrationInfo = new RegistrationInfo(email, password);
-        registerUserInfo(registrationInfo);
-    }
-
-    private void registerUserInfo(RegistrationInfo registrationInfod) {
-        authViewModel.registerNewUser(registrationInfod);
-        authViewModel.isUserRegistered().observe(this, successfulRegistration -> {
-            if (successfulRegistration) {
-                Toast.makeText(this, "Registaration Successful! Please confirm email!", Toast.LENGTH_LONG).show();
-                requestProfileActivation(registrationInfod.getEmail());
-            } else {
-                Toast.makeText(this, "Registration Failed!", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
     private void navigateToLoginScreen() {
         navigation.navigateToActivity(this, LoginActivity.class);
     }
@@ -116,6 +130,15 @@ public class RegisterActivity extends AppCompatActivity {
         signUpBtn.setClickable(false);
         progressIndicator.show();
     }
+
+    private void hideProgressIndicator() {
+        emailField.setVisibility(View.VISIBLE);
+        passwordField.setVisibility(View.VISIBLE);
+        repeatPaswordField.setVisibility(View.VISIBLE);
+        signUpBtn.setClickable(true);
+        progressIndicator.hide();
+    }
+
 
     private void verifyString(String entry) {
         if (null == entry || entry.trim().isEmpty()) {

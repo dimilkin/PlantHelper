@@ -1,6 +1,8 @@
 package com.m.plantkeeper.viewmodels;
 
 import android.app.Application;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -8,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.m.plantkeeper.localdb.dao.UserPlantDao;
 import com.m.plantkeeper.models.UserPlant;
+import com.m.plantkeeper.models.dtos.PlantResponseBody;
 import com.m.plantkeeper.models.dtos.UserInfoDto;
 import com.m.plantkeeper.models.dtos.UserPlantDto;
 import com.m.plantkeeper.services.UserPlantsService;
@@ -21,6 +24,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainPlantsListViewModel extends AndroidViewModel {
 
@@ -36,7 +42,7 @@ public class MainPlantsListViewModel extends AndroidViewModel {
 
     public void initializeUserPlants(String token, int userId) throws ExecutionException, InterruptedException {
         List<UserPlant> userPlants = userPlantsService.getUserPlantsListFromLocalStorage(userId);
-        if (userPlants != null && !userPlants.isEmpty()){
+        if (userPlants != null && !userPlants.isEmpty()) {
             userPlantsList.setValue(userPlants);
             return;
         }
@@ -58,28 +64,53 @@ public class MainPlantsListViewModel extends AndroidViewModel {
                 }));
     }
 
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        disposable.clear();
+    public void deleteUserPlant(String token, UserPlant userPlant) {
+        userPlantsService.deleteUserPlant(token, userPlant).enqueue(new Callback<PlantResponseBody>() {
+            @Override
+            public void onResponse(Call<PlantResponseBody> call, Response<PlantResponseBody> response) {
+                if (response.isSuccessful()) {
+                    userPlantsService.deleteUserPlantFromLocalStorage(userPlant);
+                    try {
+                        initializeUserPlants(token, userPlant.getUserOwnerId());
+                    } catch (ExecutionException | InterruptedException e) {
+                        Log.e("ERROR", e.getMessage());
+                    }
+                }
+                else {
+                    Toast.makeText(getApplication(), "Deletion Failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PlantResponseBody> call, Throwable t) {
+                Toast.makeText(getApplication(), "Deletion Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public MutableLiveData<List<UserPlant>> getUserPlantsList() {
         return userPlantsList;
     }
 
-    private List<UserPlant> transformUserPlantDtosToDataEntities(List<UserPlantDto> userPlantDtoList, int userOwnerId){
-       return userPlantDtoList.stream()
+    private List<UserPlant> transformUserPlantDtosToDataEntities(List<UserPlantDto> userPlantDtoList, int userOwnerId) {
+        return userPlantDtoList.stream()
                 .map(userPlantDto -> generateUserPlant(userPlantDto, userOwnerId))
                 .collect(Collectors.toList());
     }
 
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        disposable.clear();
+    }
+
     private UserPlant generateUserPlant(UserPlantDto userPlantDto, int userOwnerId) {
-     UserPlant userPlant= new UserPlant();
-     userPlant.setPlantId(userPlantDto.getPlant().getId());
-     userPlant.setProvidedName(userPlantDto.getProvidedName());
-     userPlant.setWaterPeriod(userPlantDto.getWaterPeriod());
-     userPlant.setUserOwnerId(userOwnerId);
-     return userPlant;
+        UserPlant userPlant = new UserPlant();
+        userPlant.setId(userPlantDto.getId());
+        userPlant.setPlantId(userPlantDto.getPlant().getId());
+        userPlant.setProvidedName(userPlantDto.getProvidedName());
+        userPlant.setWaterPeriod(userPlantDto.getWaterPeriod());
+        userPlant.setUserOwnerId(userOwnerId);
+        return userPlant;
     }
 }

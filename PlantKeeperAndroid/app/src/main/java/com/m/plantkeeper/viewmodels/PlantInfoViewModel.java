@@ -42,12 +42,13 @@ public class PlantInfoViewModel extends AndroidViewModel {
         try {
             currentPlant.setValue(plantsInfoService.getInfoForPlantbyIdFromLocalDb(plantid));
             loadingPlantInfo.setValue(false);
+            return plantsInfoService.getInfoForPlantbyIdFromLocalDb(plantid);
         } catch (Resources.NotFoundException exception) {
             String authToken = authService.getAuthCredentials().getUserToken();
             savePlantDataFromServerToLocalStoarage(authToken, plantid);
             loadingPlantInfo.setValue(true);
+            throw new Resources.NotFoundException();
         }
-        throw new Resources.NotFoundException();
     }
 
     public void savePlantDataFromServerToLocalStoarage(String authToken, int plantId) {

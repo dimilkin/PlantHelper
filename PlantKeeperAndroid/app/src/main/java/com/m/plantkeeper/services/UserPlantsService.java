@@ -2,16 +2,14 @@ package com.m.plantkeeper.services;
 
 import androidx.lifecycle.LiveData;
 
-import com.m.plantkeeper.models.Plant;
 import com.m.plantkeeper.models.UserPlant;
+import com.m.plantkeeper.models.dtos.PlantResponseBody;
 import com.m.plantkeeper.models.dtos.UserInfoDto;
-import com.m.plantkeeper.models.dtos.UserPlantDto;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Single;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 public interface UserPlantsService {
@@ -31,6 +29,11 @@ public interface UserPlantsService {
     void saveListOfUserPlantsToStorage(List<UserPlant> userPlantList);
 
     void updateUserPlantToLocalStorage(UserPlant userPlant);
+
+    Call<PlantResponseBody> deleteUserPlant(String authToken, UserPlant userPlant);
+
+    void deleteUserPlantFromLocalStorage(UserPlant userPlant);
+
 
 
 }

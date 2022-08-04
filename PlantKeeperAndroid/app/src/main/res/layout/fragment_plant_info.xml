@@ -14,7 +14,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="-100dp"
         android:elevation="20dp"
-        android:src="@drawable/pngegg"
+        android:src="@drawable/general_plant"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

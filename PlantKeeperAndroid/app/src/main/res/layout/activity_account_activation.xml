@@ -15,7 +15,7 @@
         android:textAlignment="center"
         android:textColor="@color/colorLightestGreen"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayoutCompat"
+        app:layout_constraintBottom_toTopOf="@+id/numbersHolder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -4,7 +4,7 @@ import com.m.plantkeeper.models.Plant;
 
 public class UserPlantDto {
 
-    private int userPlantId;
+    private int id;
     private int waterPeriod;
     private String providedName;
     private Plant plant;
@@ -28,12 +28,12 @@ public class UserPlantDto {
         this.providedName = providedName;
     }
 
-    public int getUserPlantId() {
-        return userPlantId;
+    public int getId() {
+        return id;
     }
 
-    public void setUserPlantId(int userPlantId) {
-        this.userPlantId = userPlantId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Plant getPlant() {

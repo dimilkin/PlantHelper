@@ -6,12 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import androidx.appcompat.widget.LinearLayoutCompat;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.button.MaterialButton;
@@ -53,20 +53,17 @@ public class AccountActivationActivity extends AppCompatActivity {
         viewModel.activateNewUser(activationDto);
         viewModel.isUserActivated().observe(this, successfulActivation -> {
             if (successfulActivation) {
-                Log.i("Auth", "Successfull Activation");
                 Toast.makeText(this, "Activation Successful!", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent();
                 setResult(200, intent);
                 finish();
+                navigation.navigateToActivity(this, LoginActivity.class);
             } else {
-                Log.i("Auth", "Activation Failure");
-
                 Toast.makeText(this, "Wrong Code", Toast.LENGTH_SHORT).show();
                 hideProgressIndicator();
             }
         });
     }
-
 
     private void initializeView() {
         firstNumber = findViewById(R.id.activatinFirstNumber);
@@ -122,7 +119,6 @@ public class AccountActivationActivity extends AppCompatActivity {
         secondNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override

@@ -32,8 +32,9 @@
             android:layout_margin="4dp"
             android:hint="Username"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="24dp">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email_text_edit"
@@ -49,8 +50,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:hint="Password"
-            app:layout_constraintTop_toBottomOf="@+id/email_text_input"
-            tools:layout_editor_absoluteX="24dp">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/email_text_input">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password_text_edit"
@@ -59,14 +61,26 @@
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <TextView
+            android:id="@+id/signInError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign In Failed"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/colorRed"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/password_text_input" />
 
         <LinearLayout
-            android:id="@+id/relativeLayout2"
+            android:id="@+id/buttonsGroupLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/password_text_input">
+            android:layout_marginBottom="30dp"
+            app:layout_constraintBottom_toTopOf="@+id/forgotPasswordText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/signUpButton"
@@ -86,6 +100,20 @@
                 android:layout_weight="50"
                 android:text="Sign In" />
         </LinearLayout>
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/loginProgressIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="30dp"
+            android:indeterminate="true"
+            app:indicatorColor="@color/colorLightestGreen"
+            app:indicatorSize="70dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/password_text_input"
+            app:trackColor="@color/colorPrimary" />
 
         <TextView
             android:id="@+id/forgotPasswordText"

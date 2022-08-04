@@ -67,6 +67,10 @@ public class MainPlantsListAdapter extends ListAdapter<UserPlant, MainPlantsList
         holder.plantWaterTime.setText(String.valueOf(plant.getWaterPeriod()));
     }
 
+    public UserPlant getUserPlantAt(int position) {
+        return getItem(position);
+    }
+
     class PlantsHolder extends RecyclerView.ViewHolder {
 
         private TextView plantName, plantWaterTime;

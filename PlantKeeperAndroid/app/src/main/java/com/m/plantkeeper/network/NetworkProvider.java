@@ -6,10 +6,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkProvider  {
 
-//    public static final String BASE_URL = "https://plant-app-spring-backend.herokuapp.com/";
-    public static final String BASE_URL = "https://9833-94-236-253-248.ngrok.io/";
-
-    private String apiVersion = "v.1.0/api/";
+//    public static final String BASE_URL = "https://plant-app-spring-backend.herokuapp.com";
+    public static final String BASE_URL = "https://b2c6-185-97-73-238.ngrok.io";
+    private String apiVersion = "/v.1.0/api/";
 
     public NetworkApi getConnection(){
         return api;

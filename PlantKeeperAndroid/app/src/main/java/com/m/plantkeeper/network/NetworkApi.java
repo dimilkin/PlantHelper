@@ -6,8 +6,8 @@ import com.m.plantkeeper.models.PlantShortInfo;
 import com.m.plantkeeper.models.RegistrationInfo;
 import com.m.plantkeeper.models.UserPlant;
 import com.m.plantkeeper.models.dtos.AccountActivationDto;
+import com.m.plantkeeper.models.dtos.PlantResponseBody;
 import com.m.plantkeeper.models.dtos.UserInfoDto;
-import com.m.plantkeeper.models.dtos.UserPlantDto;
 
 import java.util.List;
 
@@ -77,11 +77,11 @@ public interface NetworkApi {
             @Body UserPlant userPlantDto
     );
 
-    @DELETE("userplants/{hostUserId}/{plantId}")
-    Single<AuthResponse> removePlantFromUserProfile(
+    @DELETE("userplants/{hostUserId}/{userPlantId}")
+    Call<PlantResponseBody> removePlantFromUserProfile(
             @Header("Authorization") String token,
             @Path("hostUserId") int hostUserId,
-            @Path("plantId") int plantId
+            @Path("userPlantId") int userPlantId
     );
 
     @POST("userplants/{hostUserId}/{plantId}/{recepientUserId}")

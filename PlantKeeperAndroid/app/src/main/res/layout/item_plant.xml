@@ -33,11 +33,18 @@
             android:text="Plant Name" />
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextStylePrimary"
+            android:layout_marginStart="20dp"
+            android:text="Water Periods In Days:" />
+
+        <TextView
             android:id="@+id/itemPlantWaterTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
             style="@style/TextStylePrimary"
+            android:layout_marginStart="20dp"
             android:text="Water Time" />
 
     </LinearLayout>

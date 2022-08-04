@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,11 +22,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.m.plantkeeper.R;
+import com.m.plantkeeper.models.AuthCredentials;
 import com.m.plantkeeper.models.UserPlant;
 import com.m.plantkeeper.navigation.Navigation;
 import com.m.plantkeeper.navigation.NavigationProviderImpl;
+import com.m.plantkeeper.services.AuthService;
+import com.m.plantkeeper.services.impl.AuthServiceImpl;
 import com.m.plantkeeper.ui.adapters.MainPlantsListAdapter;
 import com.m.plantkeeper.viewmodels.MainPlantsListViewModel;
 
@@ -36,6 +41,7 @@ public class PlantsListFragment extends Fragment {
     private MainPlantsListAdapter adapter;
     private RecyclerView recyclerView;
     private MainPlantsListViewModel viewModel;
+    private AuthService authService;
 
     public PlantsListFragment() {
         // Required empty public constructor
@@ -46,6 +52,7 @@ public class PlantsListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         viewModel = new ViewModelProvider(requireActivity()).get(MainPlantsListViewModel.class);
+        authService = AuthServiceImpl.getAuthInstance();
     }
 
     @Override
@@ -53,21 +60,42 @@ public class PlantsListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_plants_list, container, false);
 
-        Bundle bundle = this.getArguments();
-        String token = bundle.getString("AUTHTOKEN");
-        int userId = bundle.getInt("USERID");
+        AuthCredentials authCredentials = authService.getAuthCredentials();
+        String authtoken = authCredentials.getUserToken();
+        int userId = authCredentials.getUserId();
 
         try {
-            viewModel.initializeUserPlants(token, userId);
+            viewModel.initializeUserPlants(authtoken, userId);
         } catch (ExecutionException | InterruptedException exception) {
             Log.e("ERROR : ", "Data is missing", exception);
             exception.printStackTrace();
         }
         initializeView(view);
 
+        attachItemTouchHelper(authtoken, userId);
+
         adapter.setAdapterClickListener(this::navigateToPlantInfoFragment);
         adapter.setAdapterLongClickListener(this::navigateToEdditPlant);
         return view;
+    }
+
+    private void attachItemTouchHelper(String authToken, int userId) {
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+                UserPlant userPlant = adapter.getUserPlantAt(position);
+//                alarmProvider.cancellAllAlarm(userPlant);
+                viewModel.deleteUserPlant(authToken, userPlant);
+                adapter.notifyDataSetChanged();
+                Toast.makeText(getContext(), "Plant Deleted!", Toast.LENGTH_SHORT).show();
+            }
+        }).attachToRecyclerView(recyclerView);
     }
 
     @Override

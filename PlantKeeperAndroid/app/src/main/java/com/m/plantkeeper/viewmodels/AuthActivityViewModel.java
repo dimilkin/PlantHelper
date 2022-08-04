@@ -24,6 +24,9 @@ import retrofit2.Response;
 public class AuthActivityViewModel extends ViewModel {
 
     private MutableLiveData<Boolean> userAuthenticated = new MutableLiveData<Boolean>();
+    private MutableLiveData<Boolean> isAuthenticationLoading = new MutableLiveData<Boolean>();
+    private MutableLiveData<Boolean> isAuthenticationError = new MutableLiveData<Boolean>();
+
     private MutableLiveData<Boolean> userActivated = new MutableLiveData<Boolean>();
     private MutableLiveData<Boolean> userRegistered = new MutableLiveData<Boolean>();
 
@@ -37,15 +40,22 @@ public class AuthActivityViewModel extends ViewModel {
 
     public void authenticate(String email, String password) {
         Call<Integer> authCall = authService.authenticate(email, password);
+        isAuthenticationLoading.setValue(true);
         authCall.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(@NonNull Call<Integer> call, @NonNull Response<Integer> response) {
                 if (response.raw().code() == 401) {
                     Log.i("Auth:", "Unauthorized");
                     userAuthenticated.setValue(false);
+                    isAuthenticationLoading.setValue(false);
+                    isAuthenticationError.setValue(true);
                 }
                 if (response.headers().get("authToken") != null) {
                     userAuthenticated.setValue(true);
+                    isAuthenticationLoading.setValue(false);
+                    isAuthenticationError.setValue(false);
+
+
                     String token = "Bearer " + response.headers().get("authToken");
                     int userId = response.body() == null ? -1 : response.body();
                     AuthCredentials authCredentials = new AuthCredentials();
@@ -60,8 +70,12 @@ public class AuthActivityViewModel extends ViewModel {
             public void onFailure(@NonNull Call<Integer> call, @NonNull Throwable throwable) {
                 throwable.printStackTrace();
                 userAuthenticated.setValue(false);
+                isAuthenticationLoading.setValue(false);
+                isAuthenticationError.setValue(true);
+
             }
         });
+
     }
 
     public void registerNewUser(RegistrationInfo registrationInfo) {
@@ -124,5 +138,17 @@ public class AuthActivityViewModel extends ViewModel {
 
     public MutableLiveData<Boolean> isUserActivated() {
         return userActivated;
+    }
+
+    public MutableLiveData<Boolean> getIsAuthenticationLoading() {
+        return isAuthenticationLoading;
+    }
+
+    public MutableLiveData<Boolean> getIsAuthenticationError() {
+        return isAuthenticationError;
+    }
+
+    public void setIsAuthenticationError(MutableLiveData<Boolean> isAuthenticationError) {
+        this.isAuthenticationError = isAuthenticationError;
     }
 }

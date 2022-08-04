@@ -18,17 +18,21 @@ import io.reactivex.schedulers.Schedulers;
 public class PlantsSearchViewModel extends AndroidViewModel {
 
     private MutableLiveData<List<PlantShortInfo>> plantsInfoList = new MutableLiveData<>();
-    private CompositeDisposable disposable = new CompositeDisposable();
-    private PlantsInfoService plantsInfoService;
+    private MutableLiveData<Boolean> isInfoLoaded = new MutableLiveData<>();
+
+    private final CompositeDisposable disposable = new CompositeDisposable();
+    private final PlantsInfoService plantsInfoService;
 
 
     public PlantsSearchViewModel(@NonNull Application application) {
         super(application);
         plantsInfoService = PlantsInfoServiceImpl.getInstance(application);
+        isInfoLoaded.setValue(false);
     }
 
     public void getShortInfoForPlants(String token) {
         if (plantsInfoList.getValue() != null){
+            isInfoLoaded.setValue(true);
             return;
         }
         disposable.add(plantsInfoService.getPlantsShortInfoFromServer(token)
@@ -39,6 +43,7 @@ public class PlantsSearchViewModel extends AndroidViewModel {
                     public void onSuccess(List<PlantShortInfo> plantShortInfoList) {
                         plantsInfoList.setValue(new ArrayList<>());
                         plantsInfoList.setValue(plantShortInfoList);
+                        isInfoLoaded.setValue(true);
                     }
                     @Override
                     public void onError(Throwable e) {
@@ -57,7 +62,7 @@ public class PlantsSearchViewModel extends AndroidViewModel {
         return plantsInfoList;
     }
 
-    public void setPlantsInfoList(MutableLiveData<List<PlantShortInfo>> plantsInfoList) {
-        this.plantsInfoList = plantsInfoList;
+    public MutableLiveData<Boolean> getIsInfoLoaded() {
+        return isInfoLoaded;
     }
 }

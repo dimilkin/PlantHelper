@@ -122,12 +122,14 @@ public class PlantsRepository {
     }
 
     public Plant getPlantFromDbById(int plantid) throws ExecutionException, InterruptedException {
-        return new GetPlantFromDbById(plantsDao).execute(plantid).get();
+        Plant plant = new GetPlantFromDbById(plantsDao).execute(plantid).get();
+        return plant;
     }
 
     public boolean plantWithIdExists(int plantId) {
         try {
-            return getPlantFromDbById(plantId) != null;
+            Plant plant = getPlantFromDbById(plantId);
+            return plant != null;
         } catch (ExecutionException | InterruptedException e) {
             Log.e("Failed To Get Plant From Db", "Failed To Get Plant From Db", e);
             return false;
