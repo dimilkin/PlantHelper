@@ -1,20 +1,11 @@
 package com.m.plantkeeper.ui;
 
+import static com.m.plantkeeper.Constants.EXTRA_PLANT_ID;
 import static com.m.plantkeeper.Constants.EXTRA_USER_PLANT_ID;
 import static com.m.plantkeeper.Constants.EXTRA_USER_PLANT_NAME;
-import static com.m.plantkeeper.Constants.EXTRA_PLANT_ID;
 import static com.m.plantkeeper.Constants.UPDATE_USER_PLANT;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,6 +14,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.m.plantkeeper.R;
 import com.m.plantkeeper.models.AuthCredentials;
@@ -42,6 +43,7 @@ public class PlantsListFragment extends Fragment {
     private RecyclerView recyclerView;
     private MainPlantsListViewModel viewModel;
     private AuthService authService;
+    private Toolbar toolbar;
 
     public PlantsListFragment() {
         // Required empty public constructor
@@ -71,6 +73,7 @@ public class PlantsListFragment extends Fragment {
             exception.printStackTrace();
         }
         initializeView(view);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
         attachItemTouchHelper(authtoken, userId);
 
@@ -156,6 +159,7 @@ public class PlantsListFragment extends Fragment {
 
     private void initializeView(View view){
         recyclerView = view.findViewById(R.id.plantsRecyclerView);
+        toolbar = view.findViewById(R.id.plantsListFragmentToolbar);
         adapter = new MainPlantsListAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
