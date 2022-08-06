@@ -4,18 +4,15 @@ import static com.m.plantkeeper.Constants.EXTRA_PLANT_INFO_BODY;
 import static com.m.plantkeeper.Constants.EXTRA_PLANT_INFO_TITLE;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.m.plantkeeper.R;
+import androidx.fragment.app.Fragment;
 
-import org.w3c.dom.Text;
+import com.m.plantkeeper.R;
 
 public class ShortInfoFragment extends Fragment {
 
@@ -29,7 +26,6 @@ public class ShortInfoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -44,7 +40,8 @@ public class ShortInfoFragment extends Fragment {
             contentText.setText(bundle.getString(EXTRA_PLANT_INFO_BODY));
         }
         closeButton.setOnClickListener(v -> {
-            getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+//            getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+            getActivity().getSupportFragmentManager().popBackStack();
         });
         return view;
     }

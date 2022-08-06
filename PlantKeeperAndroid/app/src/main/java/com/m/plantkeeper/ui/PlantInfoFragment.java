@@ -1,9 +1,9 @@
 package com.m.plantkeeper.ui;
 
+import static com.m.plantkeeper.Constants.EXTRA_PLANT_ID;
 import static com.m.plantkeeper.Constants.EXTRA_PLANT_INFO_BODY;
 import static com.m.plantkeeper.Constants.EXTRA_PLANT_INFO_TITLE;
 import static com.m.plantkeeper.Constants.EXTRA_USER_PLANT_NAME;
-import static com.m.plantkeeper.Constants.EXTRA_PLANT_ID;
 
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -23,8 +23,6 @@ import com.m.plantkeeper.models.Plant;
 import com.m.plantkeeper.models.UserPlant;
 import com.m.plantkeeper.navigation.Navigation;
 import com.m.plantkeeper.navigation.NavigationProviderImpl;
-import com.m.plantkeeper.services.AuthService;
-import com.m.plantkeeper.services.impl.AuthServiceImpl;
 import com.m.plantkeeper.viewmodels.PlantInfoViewModel;
 
 import java.util.concurrent.ExecutionException;
@@ -54,8 +52,8 @@ public class PlantInfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_plant_info, container, false);
-
         initialiseView(view);
+
         UserPlant userPlant = getInfoFromBundle();
         int plantId = userPlant.getId();
         try {
@@ -110,53 +108,53 @@ public class PlantInfoFragment extends Fragment {
         potentialProblems = view.findViewById(R.id.plantInfoPotentialProblems);
     }
 
-    private void setClickListeners(Plant plant){
-        watering.setOnClickListener( v -> {
+    private void setClickListeners(Plant plant) {
+        watering.setOnClickListener(v -> {
             openInfoFragment("Watering", plant.getWatering());
         });
-        soil.setOnClickListener( v -> {
+        soil.setOnClickListener(v -> {
             openInfoFragment("Soil Info", plant.getSoil());
         });
-        temperature.setOnClickListener( v -> {
+        temperature.setOnClickListener(v -> {
             openInfoFragment("Temperature", plant.getTemperature());
         });
-        origin.setOnClickListener( v -> {
+        origin.setOnClickListener(v -> {
             openInfoFragment("Origin", plant.getOrigin());
         });
-        size.setOnClickListener( v -> {
+        size.setOnClickListener(v -> {
             openInfoFragment("Size", plant.getMaxGrowth());
         });
-        toxicPets.setOnClickListener( v -> {
+        toxicPets.setOnClickListener(v -> {
             openInfoFragment("Toxic To Pets", plant.getPoisonousForPets());
         });
-        light.setOnClickListener( v -> {
+        light.setOnClickListener(v -> {
             openInfoFragment("Light", plant.getLight());
         });
-        repotting.setOnClickListener( v -> {
+        repotting.setOnClickListener(v -> {
             openInfoFragment("Repotting", plant.getRePotting());
         });
-        airHumidity.setOnClickListener( v -> {
+        airHumidity.setOnClickListener(v -> {
             openInfoFragment("Air Humidity", plant.getAirHumidity());
         });
-        bestGrows.setOnClickListener( v -> {
+        bestGrows.setOnClickListener(v -> {
             openInfoFragment("Best Grows", plant.getWhereItGrowsBest());
         });
-        scientificNames.setOnClickListener( v -> {
+        scientificNames.setOnClickListener(v -> {
             openInfoFragment("Scientific Name", plant.getScientificName());
         });
-        additionalInfo.setOnClickListener( v -> {
+        additionalInfo.setOnClickListener(v -> {
             openInfoFragment("Additional Info", plant.getWatering());
         });
-        potentialProblems.setOnClickListener( v -> {
+        potentialProblems.setOnClickListener(v -> {
             openInfoFragment("Potential Problems", plant.getWatering());
         });
     }
 
-    private void openInfoFragment(String title, String body){
+    private void openInfoFragment(String title, String body) {
         ShortInfoFragment shortInfoFragment = new ShortInfoFragment();
         Bundle bundle = new Bundle();
         bundle.putString(EXTRA_PLANT_INFO_TITLE, title);
         bundle.putString(EXTRA_PLANT_INFO_BODY, body);
-        navigation.navigateToFragment(shortInfoFragment, getActivity(),R.id.plantInfoFragmentContainer, bundle);
+        navigation.navigateToFragment(shortInfoFragment, getActivity(), R.id.plantInfoFragmentContainer, bundle);
     }
 }
