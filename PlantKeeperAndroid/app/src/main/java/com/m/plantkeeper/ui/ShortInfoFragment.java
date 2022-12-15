@@ -40,7 +40,6 @@ public class ShortInfoFragment extends Fragment {
             contentText.setText(bundle.getString(EXTRA_PLANT_INFO_BODY));
         }
         closeButton.setOnClickListener(v -> {
-//            getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
             getActivity().getSupportFragmentManager().popBackStack();
         });
         return view;

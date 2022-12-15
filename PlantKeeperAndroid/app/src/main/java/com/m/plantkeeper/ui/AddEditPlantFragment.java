@@ -230,15 +230,15 @@ public class AddEditPlantFragment extends Fragment {
     private void saveUserPlant(String authToken, int userid, UserPlant userPlantDto) {
         addEditPlantViewModel.createNewUserPlant(authToken, userid, plantId, userPlantDto).enqueue(new Callback<UserPlant>() {
             @Override
-            public void onResponse(Call<UserPlant> call, Response<UserPlant> responsePlant) {
-                if (!responsePlant.isSuccessful()) {
+            public void onResponse(Call<UserPlant> call, Response<UserPlant> responseUserPlant) {
+                if (!responseUserPlant.isSuccessful()) {
                     Toast.makeText(getContext(), "Saving Failed ", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 plantInfoViewModel.savePlantDataFromServerToLocalStoarage(authToken, plantId);
-                addEditPlantViewModel.startNewAlarm(providedName, userPlantDto.getWaterPeriod(), plantId);
-                userPlantDto.setId(responsePlant.body().getId());
+                userPlantDto.setId(responseUserPlant.body().getId());
                 addEditPlantViewModel.saveUserPlantToLocalStorage(userPlantDto);
+                addEditPlantViewModel.startNewAlarm(providedName, userPlantDto.getWaterPeriod(), userPlantDto.getId());
                 navigation.navigateToPreviousFragment(getActivity());
             }
             @Override
