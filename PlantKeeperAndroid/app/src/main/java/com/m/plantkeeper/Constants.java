@@ -12,6 +12,11 @@ public class Constants {
     public static final String EXTRA_PLANT_INFO_BODY = "com.m.plantkeeper.EXTRA_PLANT_INFO_BODY";
     public static final String EXTRA_USER_EMAIL = "com.m.plantkeeper.EXTRA_USER_EMAIL";
     public static final String UPDATE_USER_PLANT = "com.m.plantkeeper.UPDATE_USER_PLANT";
+    public static final String PLANT_INFO_TYPE = "com.m.plantkeeper.PLANT_INFO_TYPE";
+    public static final String INFO_TYPE_ADDITIONAL = "INFO_TYPE_ADDITIONAL";
+    public static final String INFO_TYPE_PROBLEMS = "INFO_TYPE_PROBLEMS";
+
+
 
 
 

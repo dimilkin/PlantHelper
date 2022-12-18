@@ -213,7 +213,7 @@ public class AddEditPlantFragment extends Fragment {
                     Toast.makeText(getContext(), "Update Failed ", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                addEditPlantViewModel.startNewAlarm(providedName, userPlantDto.getWaterPeriod(), plantId);
+                addEditPlantViewModel.startNewAlarm(providedName, userPlantDto.getWaterPeriod(), response.body().getId());
                 userPlantDto.setPlantId(plantId);
                 userPlantDto.setUserOwnerId(userid);
                 addEditPlantViewModel.updateUserPlantToLocalStorage(userPlantDto);

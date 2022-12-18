@@ -1,16 +1,27 @@
 package com.m.plantkeeper.models;
 
-public class PotentialPlantProblems {
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+@Entity(tableName = "plants_problems")
+public class PotentialPlantProblems implements CombinedPlantInfo {
+
+    @PrimaryKey(autoGenerate = true)
+    private int databaseKey;
     private long id;
-
     private String title;
-
     private String content;
-
-    private Plant plantId;
+    private int plantId;
 
     public PotentialPlantProblems() {
+    }
+
+    public int getDatabaseKey() {
+        return databaseKey;
+    }
+
+    public void setDatabaseKey(int databaseKey) {
+        this.databaseKey = databaseKey;
     }
 
     public long getId() {
@@ -37,11 +48,21 @@ public class PotentialPlantProblems {
         this.content = content;
     }
 
-    public Plant getPlantId() {
+    public int getPlantId() {
         return plantId;
     }
 
-    public void setPlantId(Plant plantId) {
+    public void setPlantId(int plantId) {
         this.plantId = plantId;
+    }
+
+    @Override
+    public String getInfoTitle() {
+        return title;
+    }
+
+    @Override
+    public String getInfoContent() {
+        return content;
     }
 }

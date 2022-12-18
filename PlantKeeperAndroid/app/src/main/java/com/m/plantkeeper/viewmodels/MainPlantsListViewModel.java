@@ -12,6 +12,7 @@ import com.m.plantkeeper.models.UserPlant;
 import com.m.plantkeeper.models.dtos.PlantResponseBody;
 import com.m.plantkeeper.models.dtos.UserInfoDto;
 import com.m.plantkeeper.models.dtos.UserPlantDto;
+import com.m.plantkeeper.notifications.local.AlarmProvider;
 import com.m.plantkeeper.services.UserPlantsService;
 import com.m.plantkeeper.services.impl.UserPlantsServiceImpl;
 
@@ -31,12 +32,14 @@ public class MainPlantsListViewModel extends AndroidViewModel {
 
     private MutableLiveData<List<UserPlant>> userPlantsList = new MutableLiveData<>();
     private UserPlantsService userPlantsService;
+    private AlarmProvider alarmProvider;
 
     private CompositeDisposable disposable = new CompositeDisposable();
 
     public MainPlantsListViewModel(@NonNull Application application) {
         super(application);
         userPlantsService = UserPlantsServiceImpl.getInstance(application);
+        alarmProvider = new AlarmProvider(application.getApplicationContext());
     }
 
     public void initializeUserPlants(String token, int userId) throws ExecutionException, InterruptedException {
@@ -111,5 +114,9 @@ public class MainPlantsListViewModel extends AndroidViewModel {
         userPlant.setWaterPeriod(userPlantDto.getWaterPeriod());
         userPlant.setUserOwnerId(userOwnerId);
         return userPlant;
+    }
+
+    public void cancelAlarm(int userPlantId) {
+        alarmProvider.cancelAlarm(userPlantId);
     }
 }

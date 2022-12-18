@@ -37,15 +37,31 @@
             android:layout_height="wrap_content"
             style="@style/TextStylePrimary"
             android:layout_marginStart="20dp"
-            android:text="Water Periods In Days:" />
+            android:text="Water Me Every:" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp">
 
         <TextView
             android:id="@+id/itemPlantWaterTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/TextStylePrimary"
+            android:textColor="@color/colorPrimaryDark"
             android:layout_marginStart="20dp"
-            android:text="Water Time" />
+            android:text="12" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextStylePrimary"
+                android:layout_marginStart="20dp"
+                android:text="Days" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </LinearLayout>
 </LinearLayout>

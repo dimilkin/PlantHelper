@@ -32,7 +32,7 @@
             android:layout_margin="8dp"
             android:text="Line 2"
             android:textColor="@color/colorLightestGreen"
-            android:textSize="15sp" />
+            android:textSize="16sp" />
 
     </RelativeLayout>
 

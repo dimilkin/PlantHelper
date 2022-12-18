@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey;
 public class UserPlant {
 
     @PrimaryKey(autoGenerate = true)
+    private int databaseKey;
     private int id;
     private int waterPeriod;
     private String providedName;
@@ -15,6 +16,14 @@ public class UserPlant {
     private int assugnedUserId;
 
     public UserPlant() {
+    }
+
+    public int getDatabaseKey() {
+        return databaseKey;
+    }
+
+    public void setDatabaseKey(int databaseKey) {
+        this.databaseKey = databaseKey;
     }
 
     public int getId() {

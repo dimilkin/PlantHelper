@@ -4,6 +4,9 @@ import static com.m.plantkeeper.Constants.EXTRA_PLANT_ID;
 import static com.m.plantkeeper.Constants.EXTRA_PLANT_INFO_BODY;
 import static com.m.plantkeeper.Constants.EXTRA_PLANT_INFO_TITLE;
 import static com.m.plantkeeper.Constants.EXTRA_USER_PLANT_NAME;
+import static com.m.plantkeeper.Constants.INFO_TYPE_ADDITIONAL;
+import static com.m.plantkeeper.Constants.INFO_TYPE_PROBLEMS;
+import static com.m.plantkeeper.Constants.PLANT_INFO_TYPE;
 
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -143,10 +146,10 @@ public class PlantInfoFragment extends Fragment {
             openInfoFragment("Scientific Name", plant.getScientificName());
         });
         additionalInfo.setOnClickListener(v -> {
-            openInfoFragment("Additional Info", plant.getWatering());
+            openLongInfoFragment(plant.getId(), INFO_TYPE_ADDITIONAL);
         });
         potentialProblems.setOnClickListener(v -> {
-            openInfoFragment("Potential Problems", plant.getWatering());
+            openLongInfoFragment(plant.getId(), INFO_TYPE_PROBLEMS);
         });
     }
 
@@ -156,5 +159,13 @@ public class PlantInfoFragment extends Fragment {
         bundle.putString(EXTRA_PLANT_INFO_TITLE, title);
         bundle.putString(EXTRA_PLANT_INFO_BODY, body);
         navigation.navigateToFragment(shortInfoFragment, getActivity(), R.id.plantInfoFragmentContainer, bundle);
+    }
+
+    private void openLongInfoFragment(int plantId, String infoType){
+        LongInfoFragment longInfoFragment = new LongInfoFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(EXTRA_PLANT_ID, plantId);
+        bundle.putString(PLANT_INFO_TYPE, infoType);
+        navigation.navigateToFragment(longInfoFragment, getActivity(), R.id.plantInfoFragmentContainer, bundle);
     }
 }

@@ -8,18 +8,25 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.m.plantkeeper.models.AdditionalPlantInfo;
 import com.m.plantkeeper.models.Plant;
+import com.m.plantkeeper.models.PotentialPlantProblems;
+import com.m.plantkeeper.models.dtos.PlantsInfoDto;
+import com.m.plantkeeper.models.mappers.PlantModelDtoMapper;
 import com.m.plantkeeper.services.AuthService;
 import com.m.plantkeeper.services.PlantsInfoService;
 import com.m.plantkeeper.services.impl.AuthServiceImpl;
 import com.m.plantkeeper.services.impl.PlantsInfoServiceImpl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
+import kotlin.collections.ArrayDeque;
 
 public class PlantInfoViewModel extends AndroidViewModel {
 
@@ -29,6 +36,7 @@ public class PlantInfoViewModel extends AndroidViewModel {
 
     private MutableLiveData<Plant> currentPlant = new MutableLiveData<>();
     private MutableLiveData<Boolean> loadingPlantInfo = new MutableLiveData<>();
+
 
 
     public PlantInfoViewModel(@NonNull Application application) {
@@ -58,10 +66,14 @@ public class PlantInfoViewModel extends AndroidViewModel {
         disposable.add(plantsInfoService.getInfoForPlantByIdFromServer(authToken, plantId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableSingleObserver<Plant>() {
+                .subscribeWith(new DisposableSingleObserver<PlantsInfoDto>() {
                     @Override
-                    public void onSuccess(Plant plant) {
+                    public void onSuccess(PlantsInfoDto plantsInfoDto) {
+
+                        Plant plant = PlantModelDtoMapper.mapDtoToPlantModel(plantsInfoDto);
                         plantsInfoService.savePlantDataFromServerToLocalStoarage(plant);
+                        plantsInfoService.saveAdditionalInfoForPlantToLocalStorage(plantsInfoDto.getAdditionalInformation(), plantsInfoDto.getPlantId());
+                        plantsInfoService.savePotentialProblemsForPlantToLocalStorage(plantsInfoDto.getPotentialProblems(), plantsInfoDto.getPlantId());
                         currentPlant.setValue(plant);
                         loadingPlantInfo.setValue(false);
                     }
@@ -72,6 +84,22 @@ public class PlantInfoViewModel extends AndroidViewModel {
                         loadingPlantInfo.setValue(true);
                     }
                 }));
+    }
+
+    public List<PotentialPlantProblems> getPotentialProblemsForPlantById (int plantId){
+        try {
+            return plantsInfoService.getPotentialProblemsForPlantById(plantId);
+        } catch (ExecutionException | InterruptedException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public List<AdditionalPlantInfo> getAdditionalInfoForPlantById (int plantId){
+        try {
+            return plantsInfoService.getAdditionalInfoForPlantById(plantId);
+        } catch (ExecutionException | InterruptedException e) {
+            return new ArrayList<>();
+        }
     }
 
     @Override

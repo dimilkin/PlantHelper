@@ -5,6 +5,7 @@ import static com.m.plantkeeper.Constants.EXTRA_USER_PLANT_ID;
 import static com.m.plantkeeper.Constants.EXTRA_USER_PLANT_NAME;
 import static com.m.plantkeeper.Constants.UPDATE_USER_PLANT;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ import com.m.plantkeeper.models.AuthCredentials;
 import com.m.plantkeeper.models.UserPlant;
 import com.m.plantkeeper.navigation.Navigation;
 import com.m.plantkeeper.navigation.NavigationProviderImpl;
+import com.m.plantkeeper.notifications.local.AlarmProvider;
 import com.m.plantkeeper.services.AuthService;
 import com.m.plantkeeper.services.impl.AuthServiceImpl;
 import com.m.plantkeeper.ui.adapters.MainPlantsListAdapter;
@@ -93,7 +95,7 @@ public class PlantsListFragment extends Fragment {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
                 UserPlant userPlant = adapter.getUserPlantAt(position);
-//                alarmProvider.cancellAllAlarm(userPlant);
+                viewModel.cancelAlarm(userPlant.getId());
                 viewModel.deleteUserPlant(authToken, userPlant);
                 adapter.notifyDataSetChanged();
                 Toast.makeText(getContext(), "Plant Deleted!", Toast.LENGTH_SHORT).show();

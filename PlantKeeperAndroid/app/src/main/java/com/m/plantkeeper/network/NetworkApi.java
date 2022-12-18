@@ -7,6 +7,7 @@ import com.m.plantkeeper.models.RegistrationInfo;
 import com.m.plantkeeper.models.UserPlant;
 import com.m.plantkeeper.models.dtos.AccountActivationDto;
 import com.m.plantkeeper.models.dtos.PlantResponseBody;
+import com.m.plantkeeper.models.dtos.PlantsInfoDto;
 import com.m.plantkeeper.models.dtos.UserInfoDto;
 
 import java.util.List;
@@ -49,7 +50,7 @@ public interface NetworkApi {
     // -------------------------------------------------
 
     @GET("plants/{plantId}")
-    Single<Plant> getInfoForPlant(
+    Single<PlantsInfoDto> getInfoForPlant(
             @Header("Authorization") String token,
             @Path("plantId") int plantId
     );

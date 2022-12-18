@@ -20,7 +20,7 @@ public class AlarmProvider extends ContextWrapper {
     }
 
     public void cancelAlarm(int intentID) {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, NotificationReciver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, intentID, intent, PendingIntent.FLAG_ONE_SHOT + PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.cancel(pendingIntent);

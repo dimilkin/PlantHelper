@@ -12,7 +12,8 @@ import com.m.plantkeeper.models.Plant;
 import java.util.List;
 
 @Dao
-public interface PlantDao {
+public interface
+PlantDao {
 
     @Insert
     void insert(Plant plant);

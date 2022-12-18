@@ -6,7 +6,8 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "plants_info")
 public class Plant {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    private int databaseKey;
     private int id;
     private String origin;
     private String commonName;
@@ -23,6 +24,14 @@ public class Plant {
     private String whereItGrowsBest;
 
     public Plant() {
+    }
+
+    public int getDatabaseKey() {
+        return databaseKey;
+    }
+
+    public void setDatabaseKey(int databaseKey) {
+        this.databaseKey = databaseKey;
     }
 
     public String getOrigin() {

@@ -72,20 +72,6 @@ public class PlantsRepository {
             plantDao.delete(plants[0]);
             return null;
         }
-
-    }
-
-    private static class ReloadPlantsAlarmInfoAsyncTask extends AsyncTask<Void, Void, List<Plant>> {
-        private PlantDao plantDao;
-
-        private ReloadPlantsAlarmInfoAsyncTask(PlantDao plantDao) {
-            this.plantDao = plantDao;
-        }
-
-        @Override
-        protected List<Plant> doInBackground(Void... voids) {
-            return plantDao.reloadPlantsAlarmInfo();
-        }
     }
 
     private static class GetPlantFromDbById extends AsyncTask<Integer, Void, Plant> {
@@ -111,14 +97,6 @@ public class PlantsRepository {
 
     public void delete(Plant plant) {
         new DeletePlantAsyncTask(plantsDao).execute(plant);
-    }
-
-    public LiveData<List<Plant>> getAllPlants() {
-        return allPlantsForTheUser;
-    }
-
-    public List<Plant> reloadPlantAlarmInfo() throws ExecutionException, InterruptedException {
-        return new ReloadPlantsAlarmInfoAsyncTask(plantsDao).execute().get();
     }
 
     public Plant getPlantFromDbById(int plantid) throws ExecutionException, InterruptedException {
